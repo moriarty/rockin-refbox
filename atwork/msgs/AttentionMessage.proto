@@ -1,11 +1,3 @@
-
-/***************************************************************************
- *  queue_entry.h - Protobuf stream protocol - send queue entry
- *
- *  Created: Fri Feb 01 22:07:14 2013
- *  Copyright  2013  Tim Niemueller [www.niemueller.de]
- ****************************************************************************/
-
 /*  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
@@ -34,35 +26,21 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __PROTOBUF_COMM_QUEUE_ENTRY_H_
-#define __PROTOBUF_COMM_QUEUE_ENTRY_H_
+package atwork_msgs;
 
-#include <boost/asio.hpp>
-#include <array>
+option java_package = "org.atwork.common_msgs";
+option java_outer_classname = "AttentionMessageProtos";
 
-namespace protobuf_comm {
-#if 0 /* just to make Emacs auto-indent happy */
+message AttentionMessage {
+  enum CompType {
+    COMP_ID  = 2000;
+    MSG_TYPE = 2;
+  }
+
+  // The message to display, be brief!
+  required string message = 1;
+  // Time (sec) the msg should be visible
+  optional float  time_to_show = 2;
+  // if the message only regards one team
+  optional string team = 3;
 }
-#endif
-
-/** Outgoing queue entry. */
-struct QueueEntry {
-public:
-  /** Constructor. */
-  QueueEntry()
-  {
-    frame_header.header_version = PB_FRAME_V2;
-    frame_header.cipher         = PB_ENCRYPTION_NONE;
-  };
-  std::string  serialized_message;	     ///< serialized protobuf message
-  frame_header_t    frame_header;	     ///< Frame header (network byte order), never encrypted
-  frame_header_v1_t frame_header_v1;	             ///< Frame header (network byte order), never encrypted
-  message_header_t message_header;		             ///< Frame header (network byte order)
-  std::array<boost::asio::const_buffer, 3> buffers;	 ///< outgoing buffers
-  std::string   encrypted_message;	                 ///< encrypted buffer if encryption is used
-};
-
-
-} // end namespace protobuf_comm
-
-#endif

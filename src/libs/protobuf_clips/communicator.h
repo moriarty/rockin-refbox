@@ -40,8 +40,11 @@
 #include <list>
 #include <map>
 #include <clipsmm.h>
+#include <vector>
 
-#include <protobuf_comm/server.h>
+#include <protobuf_comm/asio/server.h>
+#include <protobuf_comm/mqtt/mqtt_publisher.h>
+#include <protobuf_comm/mqtt/mqtt_subscriber.h>
 #include <core/threading/mutex.h>
 
 namespace protobuf_comm {
@@ -117,6 +120,7 @@ class ClipsProtobufCommunicator
   void          clips_pb_destroy(void *msgptr);
   void          clips_pb_set_field(void *msgptr, std::string field_name, CLIPS::Value value);
   void          clips_pb_add_list(void *msgptr, std::string field_name, CLIPS::Value value);
+	//asio Methode
   void          clips_pb_send(long int client_id, void *msgptr);
   long int      clips_pb_client_connect(std::string host, int port);
   void          clips_pb_disconnect(long int client_id);
@@ -134,6 +138,14 @@ class ClipsProtobufCommunicator
   void          clips_pb_peer_destroy(long int peer_id);
   void          clips_pb_peer_setup_crypto(long int peer_id,
 					   std::string crypto_key, std::string cipher);
+
+	//mqtt Methode
+  void 			clips_pb_mqtt_publisher_create(std::string host, int port);
+  void 			clips_pb_mqtt_subscriber_create(std::string host, int port,
+												 std::string team, std::string msg_type);
+  void 			clips_pb_mqtt_publish(std::string team, void *msgptr);
+
+
 
   CLIPS::Value  clips_pb_connect(std::string host, int port);
 
@@ -174,12 +186,21 @@ class ClipsProtobufCommunicator
   void handle_client_receive_fail(long int client_id,
 				  uint16_t comp_id, uint16_t msg_type, std::string msg);
 
+  void handle_mqtt_msg(std::string topic, int16_t comp_id, int16_t msg_type,
+					   std::shared_ptr<google::protobuf::Message> msg);
+  void handle_mqtt_connected(int rc);
+  void handle_mqtt_disconnected(int rc);
+  void handle_mqtt_published(int rc);
+
  private:
   CLIPS::Environment   *clips_;
   fawkes::Mutex        &clips_mutex_;
 
-  protobuf_comm::MessageRegister       *message_register_;
-  protobuf_comm::ProtobufStreamServer  *server_;
+  protobuf_comm::MessageRegister       			 *message_register_;
+  protobuf_comm::ProtobufStreamServer  			 *server_;
+  protobuf_comm::MqttPublisher 					 *mqtt_publisher_;
+  std::vector<std::unique_ptr
+		  <protobuf_comm::MqttSubscriber>> 	 	 *mqtt_subscriber_vec_;
 
   boost::signals2::signal<void (protobuf_comm::ProtobufStreamServer::ClientID,
 				std::shared_ptr<google::protobuf::Message>)> sig_server_sent_;

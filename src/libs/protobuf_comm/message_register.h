@@ -130,10 +130,11 @@ class MessageRegister : boost::noncopyable
 		 frame_header_t &frame_header,
 		 message_header_t &message_header, 
 		 std::string &data);
+
   std::shared_ptr<google::protobuf::Message>
-  deserialize(frame_header_t &frame_header,
-	      message_header_t &message_header,
-	      void *data);
+          deserialize(frame_header_t &frame_header,
+                      message_header_t &message_header,
+                      void *data);
 
   /** Mapping from message type to load error message. */
   typedef std::multimap<std::string, std::string> LoadFailMap;
@@ -146,13 +147,15 @@ class MessageRegister : boost::noncopyable
   const LoadFailMap &  load_failures() const
   { return failed_to_load_types_; }
 
+  google::protobuf::Message * create_msg(std::string &msg_type);
+
  private: // members
   typedef std::pair<uint16_t, uint16_t> KeyType;
   typedef std::map<KeyType, google::protobuf::Message *> TypeMap;
   typedef std::map<std::string, google::protobuf::Message *> TypeNameMap;
 
   KeyType key_from_desc(const google::protobuf::Descriptor *desc);
-  google::protobuf::Message * create_msg(std::string &msg_type);
+
 
   std::mutex maps_mutex_;
   TypeMap message_by_comp_type_;

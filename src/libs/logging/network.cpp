@@ -24,7 +24,7 @@
 #include <logging/network.h>
 
 #include <logging/llsf_log_msgs/LogMessage.pb.h>
-#include <protobuf_comm/server.h>
+#include <protobuf_comm/asio/server.h>
 
 #include <sys/time.h>
 #include <time.h>

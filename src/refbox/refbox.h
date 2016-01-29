@@ -60,17 +60,6 @@ namespace protobuf_clips {
   class ClipsProtobufCommunicator;
 }
 
-namespace llsf_sps {
-  class SPSComm;
-}
-
-#ifdef HAVE_AVAHI
-namespace fawkes {
-  class AvahiThread;
-  class NetworkNameResolver;
-  class ServicePublisher;
-}
-#endif
 
 #ifdef HAVE_MONGODB
 class MongoDBLogProtobuf;

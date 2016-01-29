@@ -35,14 +35,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <protobuf_comm/peer.h>
+#include <protobuf_comm/asio/peer.h>
 
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
-#include <msgs/Person.pb.h>
+#include <msgs/AttentionMessage.pb.h>
 
 using namespace protobuf_comm;
-using namespace llsf_msgs;
+using namespace atwork;
 
 /// @cond QA
 

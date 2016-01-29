@@ -260,7 +260,6 @@ MessageRegister::new_message_for(std::string &full_name)
   }
 }
 
-
 /** Serialize a message.
  * @param component_id ID of component this message type belongs to
  * @param msg_type message type
@@ -287,7 +286,6 @@ MessageRegister::serialize(uint16_t component_id, uint16_t msg_type,
   }
 }
 
-
 /** Deserialize message.
  * @param frame_header incoming message's frame header
  * @param message_header incoming message's message header
@@ -313,5 +311,4 @@ MessageRegister::deserialize(frame_header_t &frame_header, message_header_t &mes
 
   return m;
 }
-
 } // end namespace protobuf_comm

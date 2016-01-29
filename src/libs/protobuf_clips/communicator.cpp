@@ -37,9 +37,9 @@
 #include <protobuf_clips/communicator.h>
 
 #include <core/threading/mutex_locker.h>
-#include <protobuf_comm/client.h>
-#include <protobuf_comm/server.h>
-#include <protobuf_comm/peer.h>
+#include <protobuf_comm/asio/client.h>
+#include <protobuf_comm/asio/server.h>
+#include <protobuf_comm/asio/peer.h>
 
 #include <google/protobuf/descriptor.h>
 
@@ -66,9 +66,10 @@ namespace protobuf_clips {
  */
 ClipsProtobufCommunicator::ClipsProtobufCommunicator(CLIPS::Environment *env,
 						     fawkes::Mutex &env_mutex)
-  : clips_(env), clips_mutex_(env_mutex), server_(NULL)
+  : clips_(env), clips_mutex_(env_mutex), server_(NULL), mqtt_publisher_(NULL)
 {
   message_register_ = new MessageRegister();
+  mqtt_subscriber_vec_ = new std::vector<std::unique_ptr<protobuf_comm::MqttSubscriber>>;
   setup_clips();
 }
 
@@ -80,9 +81,10 @@ ClipsProtobufCommunicator::ClipsProtobufCommunicator(CLIPS::Environment *env,
 ClipsProtobufCommunicator::ClipsProtobufCommunicator(CLIPS::Environment *env,
 						     fawkes::Mutex &env_mutex,
 						     std::vector<std::string> &proto_path)
-  : clips_(env), clips_mutex_(env_mutex), server_(NULL)
+  : clips_(env), clips_mutex_(env_mutex), server_(NULL), mqtt_publisher_(NULL)
 {
-  message_register_ = new MessageRegister(proto_path);
+  message_register_    = new MessageRegister(proto_path);
+  mqtt_subscriber_vec_ = new std::vector<std::unique_ptr<protobuf_comm::MqttSubscriber>>;
   setup_clips();
 }
 
@@ -106,6 +108,7 @@ ClipsProtobufCommunicator::~ClipsProtobufCommunicator()
 
   delete message_register_;
   delete server_;
+  delete mqtt_publisher_;
 }
 
 
@@ -133,6 +136,8 @@ ClipsProtobufCommunicator::setup_clips()
   ADD_FUNCTION("pb-ref", (sigc::slot<CLIPS::Value, void *>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_ref))));
   ADD_FUNCTION("pb-set-field", (sigc::slot<void, void *, std::string, CLIPS::Value>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_set_field))));
   ADD_FUNCTION("pb-add-list", (sigc::slot<void, void *, std::string, CLIPS::Value>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_add_list))));
+
+  //Asio
   ADD_FUNCTION("pb-send", (sigc::slot<void, long int, void *>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_send))));
   ADD_FUNCTION("pb-server-enable", (sigc::slot<void, int>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::enable_server))));
   ADD_FUNCTION("pb-server-disable", (sigc::slot<void>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::disable_server))));
@@ -149,6 +154,11 @@ ClipsProtobufCommunicator::setup_clips()
   ADD_FUNCTION("pb-broadcast", (sigc::slot<void, long int, void *>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_broadcast))));
   ADD_FUNCTION("pb-connect", (sigc::slot<long int, std::string, int>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_client_connect))));
   ADD_FUNCTION("pb-disconnect", (sigc::slot<void, long int>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_disconnect))));
+
+  //Functions MQTT
+  ADD_FUNCTION("pb-mqtt-create-publish",(sigc::slot<void, std::string, int>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_mqtt_publisher_create))));
+  ADD_FUNCTION("pb-mqtt-create-subscriber",(sigc::slot<void, std::string, int, std::string, std::string>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_mqtt_subscriber_create))));
+  ADD_FUNCTION("pb-mqtt-publish",(sigc::slot<void, std::string, void *>(sigc::mem_fun(*this, &ClipsProtobufCommunicator::clips_pb_mqtt_publish))));
 }
 
 /** Enable protobuf stream server.
@@ -1047,6 +1057,68 @@ ClipsProtobufCommunicator::handle_client_receive_fail(long int client_id,
   clips_->assert_fact_f("(protobuf-receive-failed (client-id %li) (rcvd-via STREAM) "
 			"(comp-id %u) (msg-type %u) (message \"%s\"))",
 			client_id, comp_id, msg_type, msg.c_str());
+}
+
+void
+ClipsProtobufCommunicator::clips_pb_mqtt_publisher_create(std::string host, int port)
+{
+  mqtt_publisher_ = new MqttPublisher(host, port);
+  // mqtt_client_->setup(host, port);
+  mqtt_publisher_->connect();
+/*
+  server_->signal_connected()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_connected, this, _1, _2));
+  server_->signal_disconnected()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_disconnected, this, _1, _2));
+  server_->signal_received()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_msg, this, _1, _2, _3, _4));
+  server_->signal_receive_failed()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_fail, this, _1, _2, _3, _4));
+*/
+  //TODO implemente Handler for CONNECT/DISCONNECT/PUBLISH
+}
+
+void
+ClipsProtobufCommunicator::clips_pb_mqtt_subscriber_create(std::string host, int port, std::string team,
+                                                          std::string msg_type)
+{
+  protobuf_comm::MqttSubscriber* subscriber = new MqttSubscriber(host, port);
+  subscriber->subscribe(team,msg_type);
+  mqtt_subscriber_vec_->push_back(std::unique_ptr<protobuf_comm::MqttSubscriber>(subscriber));
+  /*server_->signal_connected()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_connected, this, _1, _2));
+  server_->signal_disconnected()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_disconnected, this, _1, _2));
+  server_->signal_received()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_msg, this, _1, _2, _3, _4));
+  server_->signal_receive_failed()
+          .connect(boost::bind(&ClipsProtobufCommunicator::handle_server_client_fail, this, _1, _2, _3, _4));
+  */
+  //TODO implemente Handler for CONNECT/DISCONNECT/Subscribe/MSG
+}
+
+void
+ClipsProtobufCommunicator::clips_pb_mqtt_publish(std::string team, void *msgptr)
+{
+  std::string topic = "";
+  std::shared_ptr<google::protobuf::Message> *m =
+          static_cast<std::shared_ptr<google::protobuf::Message> *>(msgptr);
+  if (!m || !*m) {
+    //logger_->log_warn("RefBox", "Cannot send to %li: invalid message", client_id);
+    return;
+  }
+
+  try {
+    topic=team+"/"+ (*m)->GetDescriptor()->full_name();
+    mqtt_publisher_->publish(topic, *m);
+    std::cout <<"Send Message: "<<(*m)->GetTypeName()<<"to: "<<team<<"over topic: "<<topic<<std::endl;
+  } catch (google::protobuf::FatalException &e) {
+    //logger_->log_warn("RefBox", "Failed to send message of type %s: %s",
+    //     (*m)->GetTypeName().c_str(), e.what());
+  } catch (std::runtime_error &e) {
+    //logger_->log_warn("RefBox", "Failed to send message of type %s: %s",
+    //     (*m)->GetTypeName().c_str(), e.what());
+  }
 }
 
 } // end namespace protobuf_clips

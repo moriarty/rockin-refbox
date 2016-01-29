@@ -17,6 +17,7 @@ BASEDIR = ../../..
 include $(BASEDIR)/etc/buildsys/config.mk
 include $(BUILDSYSDIR)/protobuf.mk
 include $(BUILDSYSDIR)/boost.mk
+include $(BUILDSYSDIR)/libmqtt.mk
 
 REQ_BOOST_LIBS = thread asio system signals2
 HAVE_BOOST_LIBS = $(call boost-have-libs,$(REQ_BOOST_LIBS))
@@ -42,7 +43,7 @@ OBJS_all = $(OBJS_libllsf_protobuf_comm)
 
 ifeq ($(HAVE_CPP11)$(HAVE_PROTOBUF)$(HAVE_BOOST_LIBS),111)
   CFLAGS  += $(CFLAGS_PROTOBUF) $(call boost-libs-cflags,$(REQ_BOOST_LIBS)) $(CFLAGS_CPP11) $(CFLAGS_LIBCRYPTO)
-  LDFLAGS += $(LDFLAGS_PROTOBUF) $(call boost-libs-ldflags,$(REQ_BOOST_LIBS)) $(LDFLAGS_LIBCRYPTO)
+  LDFLAGS += $(LDFLAGS_PROTOBUF) $(call boost-libs-ldflags,$(REQ_BOOST_LIBS)) $(LDFLAGS_LIBCRYPTO) -lmosquittopp
 
   LIBS_all  = $(LIBDIR)/libllsf_protobuf_comm.so
 else

@@ -22,13 +22,13 @@ REQ_BOOST_LIBS = thread asio system signals2
 HAVE_BOOST_LIBS = $(call boost-have-libs,$(REQ_BOOST_LIBS))
 CFLAGS += $(CFLAGS_CPP11)
 
-LIBS_qa_protobuf_comm_server = llsf_protobuf_comm llsf_msgs
+LIBS_qa_protobuf_comm_server = llsf_protobuf_comm atwork_msgs
 OBJS_qa_protobuf_comm_server = qa_server.o
 
-LIBS_qa_protobuf_comm_client = llsf_protobuf_comm llsf_msgs
+LIBS_qa_protobuf_comm_client = llsf_protobuf_comm atwork_msgs
 OBJS_qa_protobuf_comm_client = qa_client.o
 
-LIBS_qa_protobuf_comm_peer = llsf_protobuf_comm llsf_msgs
+LIBS_qa_protobuf_comm_peer = llsf_protobuf_comm atwork_msgs
 OBJS_qa_protobuf_comm_peer = qa_peer.o
 
 OBJS_all = $(OBJS_qa_protobuf_comm_server) \

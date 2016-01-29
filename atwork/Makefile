@@ -1,10 +1,4 @@
 #*****************************************************************************
-#                      Makefile Build System for Fawkes
-#                            -------------------
-#   Created on Fri Jan 18 00:17:05 2013
-#   Copyright (C) 2006-2011 by Tim Niemueller, Carologistics RoboCup Team
-#
-#*****************************************************************************
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -13,22 +7,14 @@
 #
 #*****************************************************************************
 
-BASEDIR = ../..
+BASEDIR = ..
 
 include $(BASEDIR)/etc/buildsys/config.mk
 
-SUBDIRS = aspect baseapp core utils config logging protobuf_comm \
-		protobuf_clips mongodb_log plugin
+SUBDIRS = msgs examples 
 
 # Explicit dependencies, this is needed to have make bail out if there is any
 # error. This is also necessary for working parallel build (i.e. for dual core)
-aspect: core utils config logging
-baseapp: core utils config logging plugin
-config mongodb_log: core utils
-utils: core
-logging: core protobuf_comm
-protobuf_clips: protobuf_comm
-mongodb_log: logging
-plugin: core utils config logging
+examples tools viewer controller: msgs
 
 include $(BUILDSYSDIR)/base.mk

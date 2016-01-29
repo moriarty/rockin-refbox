@@ -19,9 +19,7 @@ include $(BASEDIR)/etc/buildsys/config.mk
 include $(BUILDSYSDIR)/protobuf.mk
 include $(BUILDSYSDIR)/clips.mk
 include $(BUILDSYSDIR)/boost.mk
-include $(BUILDCONFDIR)/llsf_sps/llsf_sps.mk
 include $(BUILDCONFDIR)/mongodb_log/mongodb.mk
-include $(BUILDCONFDIR)/netcomm/netcomm.mk
 
 CFLAGS += $(CFLAGS_CPP11)
 
@@ -29,8 +27,8 @@ REQ_BOOST_LIBS = thread asio system signals2
 HAVE_BOOST_LIBS = $(call boost-have-libs,$(REQ_BOOST_LIBS))
 
 LIBS_llsf_refbox = stdc++ m llsfrbaspects llsfrbbaseapp llsfrbcore llsfrbconfig \
-		   llsfrblogging llsfrbnetcomm llsfrbplugin llsfrbutils llsf_protobuf_comm \
-		   llsf_protobuf_clips llsf_sps
+		   llsfrblogging lsfrbplugin llsfrbutils llsf_protobuf_comm \
+		   llsf_protobuf_clips 
 OBJS_llsf_refbox = main.o refbox.o clips_logger.o
 
 ifeq ($(HAVE_PROTOBUF)$(HAVE_LIBMODBUS)$(HAVE_CLIPS)$(HAVE_BOOST_LIBS),1111)

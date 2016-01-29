@@ -36,7 +36,7 @@
  */
 
 #include <boost/asio.hpp>
-#include <protobuf_comm/server.h>
+#include <protobuf_comm/asio/server.h>
 
 
 using namespace protobuf_comm;
