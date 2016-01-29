@@ -25,7 +25,7 @@ class MqttClient : public mosqpp::mosquittopp
    public:
     MqttClient();
     MqttClient(std::string clientID, std::string host, int port, bool cleanSession = true);
-    ~MqttClient();
+    virtual ~MqttClient();
 
     std::string getClientID();
     std::string getHost();

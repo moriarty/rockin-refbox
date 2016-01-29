@@ -19,6 +19,8 @@ MqttPublisher::MqttPublisher(string host, int port, bool cleanSession)
 
 }
 
+MqttPublisher::~MqttPublisher() {};
+
 void MqttPublisher::publish(string topic, std::shared_ptr <google::protobuf::Message> &m)
 {
     this->publish(topic,*m);

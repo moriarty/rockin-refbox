@@ -15,6 +15,7 @@ class MqttPublisher: public MqttClient
     public:
         /* Constructor for Publisher */
         MqttPublisher(std::string host, int port, bool cleanSession = true);
+        virtual ~MqttPublisher();
 
         /** Boost signal for on publish */
         typedef

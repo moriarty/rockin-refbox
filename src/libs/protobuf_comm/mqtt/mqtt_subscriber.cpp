@@ -20,6 +20,8 @@ MqttSubscriber::MqttSubscriber(std::string host, int port, bool cleanSession) :
     own_message_register_ = true;
 }
 
+MqttSubscriber::~MqttSubscriber() {};
+
 void MqttSubscriber::subscribe(string team, string msg_type, int qos){
 
     int mid;

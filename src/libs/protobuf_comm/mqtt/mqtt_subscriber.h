@@ -17,6 +17,7 @@ class MqttSubscriber : public MqttClient
 public:
     /** Constructor for Subscriber */
     MqttSubscriber(std::string host, int port, bool cleanSession = true);
+    virtual ~MqttSubscriber();
 
     void subscribe(std::string team, std::string msg_type, int qos = 1);
 
