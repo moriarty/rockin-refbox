@@ -42,7 +42,7 @@
 #include <logging/logger.h>
 #include <core/threading/mutex.h>
 #include <core/threading/mutex_locker.h>
-#include <protobuf_comm/server.h>
+#include <protobuf_comm/asio/server.h>
 
 #include <clipsmm.h>
 #ifdef HAVE_MONGODB

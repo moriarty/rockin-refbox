@@ -41,7 +41,7 @@
 #include <core/version.h>
 #include <config/yaml.h>
 #include <protobuf_clips/communicator.h>
-#include <protobuf_comm/peer.h>
+#include <protobuf_comm/asio/peer.h>
 #include <logging/multi.h>
 #include <logging/file.h>
 #include <logging/network.h>
