@@ -31,7 +31,7 @@
 #include <config/yaml.h>
 #include <utils/system/argparser.h>
 
-#include <protobuf_comm/client.h>
+#include <protobuf_comm/asio/client.h>
 #include <msgs/BenchmarkState.pb.h>
 
 using namespace protobuf_comm;

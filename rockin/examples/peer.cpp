@@ -26,7 +26,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <protobuf_comm/peer.h>
+#include <protobuf_comm/asio/peer.h>
 #include <msgs/BeaconSignal.pb.h>
 
 using namespace protobuf_comm;

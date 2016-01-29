@@ -26,7 +26,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <protobuf_comm/client.h>
+#include <protobuf_comm/asio/client.h>
 #include <msgs/AttentionMessage.pb.h>
 
 using namespace protobuf_comm;

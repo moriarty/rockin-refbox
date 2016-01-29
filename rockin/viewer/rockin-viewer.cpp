@@ -7,7 +7,7 @@
 #include <config/yaml.h>
 #include <utils/system/argparser.h>
 
-#include <protobuf_comm/client.h>
+#include <protobuf_comm/asio/client.h>
 #include <msgs/BenchmarkState.pb.h>
 #include <msgs/DrillingMachine.pb.h>
 #include <msgs/ForceFittingMachine.pb.h>

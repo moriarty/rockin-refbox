@@ -36,7 +36,7 @@
 
 #include <config/yaml.h>
 
-#include <protobuf_comm/peer.h>
+#include <protobuf_comm/asio/peer.h>
 #include <utils/system/argparser.h>
 
 #include <msgs/BeaconSignal.pb.h>

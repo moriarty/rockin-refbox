@@ -36,7 +36,7 @@
 
 #include <config/yaml.h>
 
-#include <protobuf_comm/client.h>
+#include <protobuf_comm/asio/client.h>
 #include <utils/system/argparser.h>
 
 #include <msgs/AttentionMessage.pb.h>
