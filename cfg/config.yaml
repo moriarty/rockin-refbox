@@ -3,7 +3,7 @@
 # Main configuration document
 
 llsfrb:
-  #plugins: "drilling_machine,triggered_conveyor_belt,force_fitting_machine"
+  plugins: "drilling_machine,triggered_conveyor_belt,force_fitting_machine"
 
   log:
     level: info
