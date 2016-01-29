@@ -27,17 +27,17 @@ REQ_BOOST_LIBS = thread asio system signals2
 HAVE_BOOST_LIBS = $(call boost-have-libs,$(REQ_BOOST_LIBS))
 
 LIBS_llsf_refbox = stdc++ m llsfrbaspects llsfrbbaseapp llsfrbcore llsfrbconfig \
-		   llsfrblogging lsfrbplugin llsfrbutils llsf_protobuf_comm \
+		   llsfrblogging llsfrbplugin llsfrbutils llsf_protobuf_comm \
 		   llsf_protobuf_clips 
 OBJS_llsf_refbox = main.o refbox.o clips_logger.o
 
-ifeq ($(HAVE_PROTOBUF)$(HAVE_LIBMODBUS)$(HAVE_CLIPS)$(HAVE_BOOST_LIBS),1111)
+ifeq ($(HAVE_PROTOBUF)$(HAVE_CLIPS)$(HAVE_BOOST_LIBS),111)
   OBJS_all =	$(OBJS_llsf_refbox)
   BINS_all =	$(BINDIR)/llsf-refbox
 
-  CFLAGS  += $(CFLAGS_PROTOBUF) $(CFLAGS_LIBMODBUS) $(CFLAGS_CLIPS) $(CFLAGS_MONGODB) \
+  CFLAGS  += $(CFLAGS_PROTOBUF) $(CFLAGS_CLIPS) $(CFLAGS_MONGODB) \
 	     $(call boost-libs-cflags,$(REQ_BOOST_LIBS))
-  LDFLAGS += $(LDFLAGS_PROTOBUF) $(LDFLAGS_LIBMODBUS) $(LDFLAGS_CLIPS) \
+  LDFLAGS += $(LDFLAGS_PROTOBUF) $(LDFLAGS_CLIPS) \
 	     $(call boost-libs-ldflags,$(REQ_BOOST_LIBS))
   #MANPAGES_all =  $(MANDIR)/man1/llsf-refbox.1
 
@@ -53,9 +53,6 @@ else
   ifneq ($(HAVE_PROTOBUF),1)
     WARN_TARGETS += warning_protobuf
   endif
-  ifneq ($(HAVE_LIBMODBUS),1)
-    WARN_TARGETS += warning_libmodbus
-  endif
   ifneq ($(HAVE_CLIPS),1)
     WARN_TARGETS += warning_clips
   endif
@@ -70,9 +67,7 @@ endif
 
 ifeq ($(OBJSSUBMAKE),1)
 all: $(WARN_TARGETS) $(WARN_TARGETS_BOOST)
-.PHONY: warning_libmodbus warning_clips
-warning_libmodbus:
-	$(SILENT)echo -e "$(INDENT_PRINT)--> $(TRED)Cannot build LLSF RefBox$(TNORMAL) (libmodbus not found)"
+.PHONY: warning_clips
 warning_clips:
 	$(SILENT)echo -e "$(INDENT_PRINT)--> $(TRED)Cannot build LLSF RefBox$(TNORMAL) (clipsmm not found)"
 warning_mongodb:
