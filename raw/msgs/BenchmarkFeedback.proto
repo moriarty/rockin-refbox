@@ -46,12 +46,6 @@ message BenchmarkFeedback {
     MSG_TYPE = 110;
   }
 
-  enum PlateState {
-    UNUSABLE = 1;
-    FAULTY   = 2;
-    PERFECT  = 3;
-  }
-
   // The benchmark phase to terminate
   // The specification of the benchmark phase is especially important in FBMs.
   // To finish the FBM, the robot should continuously send out the feedback
@@ -75,8 +69,4 @@ message BenchmarkFeedback {
   // TBM1
   optional string assembly_aid_tray_id = 5;
   optional string container_id = 6;
-
-  // TBM2
-  optional PlateState after_receiving = 7;
-  optional PlateState after_drilling = 8;
 }

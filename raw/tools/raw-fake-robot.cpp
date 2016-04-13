@@ -44,7 +44,6 @@
 #include <msgs/BenchmarkState.pb.h>
 #include <msgs/Inventory.pb.h>
 #include <msgs/Order.pb.h>
-#include <msgs/DrillingMachine.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 #include <msgs/Camera.pb.h>
 #include <msgs/BenchmarkFeedback.pb.h>
@@ -193,19 +192,6 @@ handle_message(boost::asio::ip::udp::endpoint &sender,
     }
   }
 
-  std::shared_ptr<DrillingMachineStatus> dm;
-  if ((dm = std::dynamic_pointer_cast<DrillingMachineStatus>(msg))) {
-    std::cout << "Drilling machine status received: ";
-    switch (dm->state()) {
-      case DrillingMachineStatus::AT_BOTTOM: std::cout << "AT_BOTTOM"; break;
-      case DrillingMachineStatus::AT_TOP: std::cout << "AT_TOP"; break;
-      case DrillingMachineStatus::MOVING_DOWN: std::cout << "MOVING_DOWN"; break;
-      case DrillingMachineStatus::MOVING_UP: std::cout << "MOVING_UP"; break;
-      case DrillingMachineStatus::UNKNOWN: std::cout << "UNKNOWN"; break;
-    }
-    std::cout << std::endl;
-  }
-
   std::shared_ptr<TriggeredConveyorBeltStatus> cb;
   if ((cb = std::dynamic_pointer_cast<TriggeredConveyorBeltStatus>(msg))) {
     std::cout << "Conveyor belt status received: ";
@@ -349,7 +335,6 @@ main(int argc, char **argv)
   message_register.add_message_type<BenchmarkState>();
   message_register.add_message_type<Inventory>();
   message_register.add_message_type<OrderInfo>();
-  message_register.add_message_type<DrillingMachineStatus>();
   message_register.add_message_type<TriggeredConveyorBeltStatus>();
   message_register.add_message_type<BenchmarkFeedback>();
 

@@ -9,7 +9,6 @@
 
 #include <protobuf_comm/client.h>
 #include <msgs/BenchmarkState.pb.h>
-#include <msgs/DrillingMachine.pb.h>
 #include <msgs/ForceFittingMachine.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 #include <msgs/RobotInfo.pb.h>
@@ -32,7 +31,6 @@ std::chrono::time_point<std::chrono::system_clock> last_gui_update;
 boost::mutex mutex;
 std::shared_ptr<raw_msgs::BenchmarkState> benchmark_state;
 std::shared_ptr<raw_msgs::ConveyorBeltStatus> conveyor_belt_state;
-std::shared_ptr<raw_msgs::DrillingMachineStatus> drilling_machine_state;
 std::shared_ptr<raw_msgs::ForceFittingMachineStatus> force_fitting_machine_state;
 std::shared_ptr<raw_msgs::RobotInfo> robot_info;
 std::shared_ptr<raw_msgs::Inventory> inventory;
@@ -107,10 +105,6 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
 
   if (std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg)) {
     conveyor_belt_state = std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg);
-  }
-
-  if (std::dynamic_pointer_cast<raw_msgs::DrillingMachineStatus>(msg)) {
-    drilling_machine_state = std::dynamic_pointer_cast<raw_msgs::DrillingMachineStatus>(msg);
   }
 
   if (std::dynamic_pointer_cast<raw_msgs::ForceFittingMachineStatus>(msg)) {
@@ -258,30 +252,6 @@ bool idle_handler() {
   }
 
 
-  if (drilling_machine_state) {
-    Gtk::Label *label_drilling_machine = 0;
-    builder->get_widget("label_drilling_machine", label_drilling_machine);
-
-    switch (drilling_machine_state->state()) {
-      case raw_msgs::DrillingMachineStatus::AT_BOTTOM:
-        label_drilling_machine->set_text("At bottom");
-      break;
-      case raw_msgs::DrillingMachineStatus::AT_TOP:
-        label_drilling_machine->set_text("At top");
-      break;
-      case raw_msgs::DrillingMachineStatus::MOVING_DOWN:
-        label_drilling_machine->set_text("Moving down");
-      break;
-      case raw_msgs::DrillingMachineStatus::MOVING_UP:
-        label_drilling_machine->set_text("Moving up");
-      break;
-      case raw_msgs::DrillingMachineStatus::UNKNOWN:
-        label_drilling_machine->set_text("Unknown");
-      break;
-    }
-  }
-
-
   if (force_fitting_machine_state) {
     Gtk::Label *label_force_fitting_machine = 0;
     builder->get_widget("label_force_fitting_machine", label_force_fitting_machine);
@@ -410,7 +380,6 @@ int main(int argc, char **argv)
 
   protobuf_comm::MessageRegister &message_register = client.message_register();
   message_register.add_message_type<raw_msgs::BenchmarkState>();
-  message_register.add_message_type<raw_msgs::DrillingMachineStatus>();
   message_register.add_message_type<raw_msgs::ConveyorBeltStatus>();
   message_register.add_message_type<raw_msgs::RobotInfo>();
   message_register.add_message_type<raw_msgs::AttentionMessage>();

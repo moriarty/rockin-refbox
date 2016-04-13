@@ -11,7 +11,6 @@
 #include <msgs/BenchmarkState.pb.h>
 #include <msgs/BenchmarkFeedback.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
-#include <msgs/DrillingMachine.pb.h>
 #include <msgs/ForceFittingMachine.pb.h>
 
 #include <gtkmm.h>
@@ -173,9 +172,6 @@ void on_reset_click()
   } else if (benchmark == "TBM1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (benchmark == "TBM2") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
-    cmd_scenario.mutable_scenario()->set_type_id(2);
   } else if (benchmark == "TBM3") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
     cmd_scenario.mutable_scenario()->set_type_id(3);
@@ -236,21 +232,15 @@ void on_cb_stop_click()
 
 void on_dm_down_click()
 {
-  if (!client.connected()) return;
-
-  raw_msgs::DrillingMachineCommand msg;
-  msg.set_command(raw_msgs::DrillingMachineCommand::MOVE_DOWN);
-  client.send(msg);
+  //TODO
+  return;
 }
 
 
 void on_dm_up_click()
 {
-  if (!client.connected()) return;
-
-  raw_msgs::DrillingMachineCommand msg;
-  msg.set_command(raw_msgs::DrillingMachineCommand::MOVE_UP);
-  client.send(msg);
+  //TODO
+  return;
 }
 
 
@@ -299,8 +289,9 @@ int main(int argc, char **argv)
   Gtk::Button *button_reset = 0;
   Gtk::Button *button_cb_start = 0;
   Gtk::Button *button_cb_stop = 0;
-  Gtk::Button *button_dm_up = 0;
-  Gtk::Button *button_dm_down = 0;
+  //TODO
+  //Gtk::Button *button_dm_up = 0;
+  //Gtk::Button *button_dm_down = 0;
   Gtk::Button *button_ffm_up = 0;
   Gtk::Button *button_ffm_down = 0;
   builder->get_widget("button_start", button_start);
@@ -311,8 +302,9 @@ int main(int argc, char **argv)
   builder->get_widget("button_reset", button_reset);
   builder->get_widget("button_cb_start", button_cb_start);
   builder->get_widget("button_cb_stop", button_cb_stop);
-  builder->get_widget("button_dm_up", button_dm_up);
-  builder->get_widget("button_dm_down", button_dm_down);
+  //TODO
+  //builder->get_widget("button_dm_up", button_dm_up);
+  //builder->get_widget("button_dm_down", button_dm_down);
   builder->get_widget("button_ffm_up", button_ffm_up);
   builder->get_widget("button_ffm_down", button_ffm_down);
 
@@ -325,8 +317,8 @@ int main(int argc, char **argv)
   button_reset->signal_clicked().connect(sigc::ptr_fun(&on_reset_click));
   button_cb_start->signal_clicked().connect(sigc::ptr_fun(&on_cb_start_click));
   button_cb_stop->signal_clicked().connect(sigc::ptr_fun(&on_cb_stop_click));
-  button_dm_up->signal_clicked().connect(sigc::ptr_fun(&on_dm_up_click));
-  button_dm_down->signal_clicked().connect(sigc::ptr_fun(&on_dm_down_click));
+  //button_dm_up->signal_clicked().connect(sigc::ptr_fun(&on_dm_up_click));
+  //button_dm_down->signal_clicked().connect(sigc::ptr_fun(&on_dm_down_click));
   button_ffm_up->signal_clicked().connect(sigc::ptr_fun(&on_ffm_up_click));
   button_ffm_down->signal_clicked().connect(sigc::ptr_fun(&on_ffm_down_click));
 

@@ -26,14 +26,6 @@
   (load* (resolve-file device-conveyor-belt.clp))
 )
 
-(defrule load-drilling-machine
-  (init)
-  (have-feature DrillingMachine)
-  =>
-  (printout t "Enabling Drilling Machine" crlf)
-  (load* (resolve-file device-drilling-machine.clp))
-)
-
 (defrule load-force-fitting-machine
   (init)
   (have-feature ForceFittingMachine)
