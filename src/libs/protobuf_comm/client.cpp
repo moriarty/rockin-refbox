@@ -66,6 +66,7 @@ ProtobufStreamClient::ProtobufStreamClient()
   in_frame_header_size_ = sizeof(frame_header_t);
   in_frame_header_ = malloc(in_frame_header_size_);
   in_data_ = malloc(in_data_size_);
+  socket_.open(ip::tcp::v4());
   run_asio();
 }
 
@@ -86,6 +87,7 @@ ProtobufStreamClient::ProtobufStreamClient(std::vector<std::string> &proto_path)
   frame_header_version_ = PB_FRAME_V2;
   in_frame_header_size_ = sizeof(frame_header_t);
   in_frame_header_ = malloc(in_frame_header_size_);
+  socket_.open(ip::tcp::v4());
   run_asio();
 }
 
@@ -110,6 +112,7 @@ ProtobufStreamClient::ProtobufStreamClient(MessageRegister *mr,
     in_frame_header_size_ = sizeof(frame_header_t);
   }
   in_frame_header_ = malloc(in_frame_header_size_);
+  socket_.open(ip::tcp::v4());
   run_asio();
 }
 
