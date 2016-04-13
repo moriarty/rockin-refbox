@@ -26,14 +26,6 @@
   (load* (resolve-file device-conveyor-belt.clp))
 )
 
-(defrule load-force-fitting-machine
-  (init)
-  (have-feature ForceFittingMachine)
-  =>
-  (printout t "Enabling Force Fitting Machine" crlf)
-  (load* (resolve-file device-force-fitting-machine.clp))
-)
-
 (defrule load-device-quality-control-camera
   (init)
   (have-feature QualityControlCamera)

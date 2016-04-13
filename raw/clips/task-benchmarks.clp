@@ -185,7 +185,7 @@
   (init)
   ?bm <- (object (is-a Benchmark))
   =>
-  (make-instance [TBM1] of TaskBenchmark1 (type TBM) (type-id 1) (description "Prepare Assembly Aid Tray for Force Fitting"))
+  (make-instance [TBM1] of TaskBenchmark1 (type TBM) (type-id 1) (description "Prepare Assembly Aid Tray"))
   (make-instance [TBM3] of TaskBenchmark3 (type TBM) (type-id 3) (description "Fill a Box with Parts for Manual Assembly"))
 
   (slot-insert$ ?bm registered-scenarios 1 [TBM1])

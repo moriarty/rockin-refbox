@@ -11,7 +11,6 @@
 #include <msgs/BenchmarkState.pb.h>
 #include <msgs/BenchmarkFeedback.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
-#include <msgs/ForceFittingMachine.pb.h>
 
 #include <gtkmm.h>
 #include <pangomm.h>
@@ -230,40 +229,6 @@ void on_cb_stop_click()
 }
 
 
-void on_dm_down_click()
-{
-  //TODO
-  return;
-}
-
-
-void on_dm_up_click()
-{
-  //TODO
-  return;
-}
-
-
-void on_ffm_down_click()
-{
-  if (!client.connected()) return;
-
-  raw_msgs::ForceFittingMachineCommand msg;
-  msg.set_command(raw_msgs::ForceFittingMachineCommand::MOVE_DOWN);
-  client.send(msg);
-}
-
-
-void on_ffm_up_click()
-{
-  if (!client.connected()) return;
-
-  raw_msgs::ForceFittingMachineCommand msg;
-  msg.set_command(raw_msgs::ForceFittingMachineCommand::MOVE_UP);
-  client.send(msg);
-}
-
-
 int main(int argc, char **argv)
 {
   llsfrb::YamlConfiguration config(CONFDIR);
@@ -289,11 +254,6 @@ int main(int argc, char **argv)
   Gtk::Button *button_reset = 0;
   Gtk::Button *button_cb_start = 0;
   Gtk::Button *button_cb_stop = 0;
-  //TODO
-  //Gtk::Button *button_dm_up = 0;
-  //Gtk::Button *button_dm_down = 0;
-  Gtk::Button *button_ffm_up = 0;
-  Gtk::Button *button_ffm_down = 0;
   builder->get_widget("button_start", button_start);
   builder->get_widget("button_pause", button_pause);
   builder->get_widget("button_stop", button_stop);
@@ -302,11 +262,6 @@ int main(int argc, char **argv)
   builder->get_widget("button_reset", button_reset);
   builder->get_widget("button_cb_start", button_cb_start);
   builder->get_widget("button_cb_stop", button_cb_stop);
-  //TODO
-  //builder->get_widget("button_dm_up", button_dm_up);
-  //builder->get_widget("button_dm_down", button_dm_down);
-  builder->get_widget("button_ffm_up", button_ffm_up);
-  builder->get_widget("button_ffm_down", button_ffm_down);
 
   Glib::signal_idle().connect(sigc::ptr_fun(&idle_handler));
   button_start->signal_clicked().connect(sigc::ptr_fun(&on_start_click));
@@ -317,10 +272,6 @@ int main(int argc, char **argv)
   button_reset->signal_clicked().connect(sigc::ptr_fun(&on_reset_click));
   button_cb_start->signal_clicked().connect(sigc::ptr_fun(&on_cb_start_click));
   button_cb_stop->signal_clicked().connect(sigc::ptr_fun(&on_cb_stop_click));
-  //button_dm_up->signal_clicked().connect(sigc::ptr_fun(&on_dm_up_click));
-  //button_dm_down->signal_clicked().connect(sigc::ptr_fun(&on_dm_down_click));
-  button_ffm_up->signal_clicked().connect(sigc::ptr_fun(&on_ffm_up_click));
-  button_ffm_down->signal_clicked().connect(sigc::ptr_fun(&on_ffm_down_click));
 
   client.signal_received().connect(handle_message);
   client.signal_disconnected().connect(handle_disconnect);

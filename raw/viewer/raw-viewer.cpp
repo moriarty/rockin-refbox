@@ -9,7 +9,6 @@
 
 #include <protobuf_comm/client.h>
 #include <msgs/BenchmarkState.pb.h>
-#include <msgs/ForceFittingMachine.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 #include <msgs/RobotInfo.pb.h>
 #include <msgs/AttentionMessage.pb.h>
@@ -31,7 +30,6 @@ std::chrono::time_point<std::chrono::system_clock> last_gui_update;
 boost::mutex mutex;
 std::shared_ptr<raw_msgs::BenchmarkState> benchmark_state;
 std::shared_ptr<raw_msgs::ConveyorBeltStatus> conveyor_belt_state;
-std::shared_ptr<raw_msgs::ForceFittingMachineStatus> force_fitting_machine_state;
 std::shared_ptr<raw_msgs::RobotInfo> robot_info;
 std::shared_ptr<raw_msgs::Inventory> inventory;
 std::shared_ptr<raw_msgs::OrderInfo> order_info;
@@ -105,10 +103,6 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
 
   if (std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg)) {
     conveyor_belt_state = std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg);
-  }
-
-  if (std::dynamic_pointer_cast<raw_msgs::ForceFittingMachineStatus>(msg)) {
-    force_fitting_machine_state = std::dynamic_pointer_cast<raw_msgs::ForceFittingMachineStatus>(msg);
   }
 
   if (std::dynamic_pointer_cast<raw_msgs::RobotInfo>(msg)) {
@@ -247,30 +241,6 @@ bool idle_handler() {
       break;
       case raw_msgs::ConveyorBeltRunMode::STOP:
         label_conveyor_belt->set_text("Stopped");
-      break;
-    }
-  }
-
-
-  if (force_fitting_machine_state) {
-    Gtk::Label *label_force_fitting_machine = 0;
-    builder->get_widget("label_force_fitting_machine", label_force_fitting_machine);
-
-    switch (force_fitting_machine_state->state()) {
-      case raw_msgs::ForceFittingMachineStatus::AT_BOTTOM:
-        label_force_fitting_machine->set_text("At bottom");
-      break;
-      case raw_msgs::ForceFittingMachineStatus::AT_TOP:
-        label_force_fitting_machine->set_text("At top");
-      break;
-      case raw_msgs::ForceFittingMachineStatus::MOVING_DOWN:
-        label_force_fitting_machine->set_text("Moving down");
-      break;
-      case raw_msgs::ForceFittingMachineStatus::MOVING_UP:
-        label_force_fitting_machine->set_text("Moving up");
-      break;
-      case raw_msgs::ForceFittingMachineStatus::UNKNOWN:
-        label_force_fitting_machine->set_text("Unknown");
       break;
     }
   }
