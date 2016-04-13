@@ -55,17 +55,6 @@ message BenchmarkFeedback {
   // benchmark feedback.
   required BenchmarkState.Phase phase_to_terminate = 100;
 
-  // FBM1
-  optional string object_class_name = 1;
-  optional Pose3D object_pose = 2;
-
-  // FBM1+FMB2
-  optional string object_instance_name = 3;
-
-  // FBM2
-  optional bool grasp_notification = 4;
-  optional Pose3D end_effector_pose = 9;
-
   // TBM1
   optional string assembly_aid_tray_id = 5;
   optional string container_id = 6;

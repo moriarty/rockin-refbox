@@ -189,7 +189,7 @@
   =>
   (retract ?mf) ; message will be destroyed after rule completes
 
-  ; Get the scenario type (NONE, FBM, TBM) and type id from the message
+  ; Get the scenario type (NONE, TBM) and type id from the message
   (bind ?pb-scenario (pb-field-value ?p "scenario"))
   (bind ?pb-scenario-type (pb-field-value ?pb-scenario "type"))
   (bind ?pb-scenario-type-id (pb-field-value ?pb-scenario "type_id"))
@@ -243,7 +243,7 @@
     (pb-set-field ?benchmarkstate "benchmark_time" ?benchmarkstate-time) ; destroys ?benchmarkstate-time!
   )
 
-  ; Add the current scenario (e.g. TBM1 or FBM2) of the benchmark
+  ; Add the current scenario (e.g. TBM1 or TBM3) of the benchmark
   (bind ?current-scenario (send [benchmark] get-current-scenario))
   (bind ?pb-benchmark-scenario (send ?current-scenario create-msg))
   (pb-set-field ?benchmarkstate "scenario" ?pb-benchmark-scenario)

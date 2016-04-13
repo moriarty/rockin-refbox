@@ -118,7 +118,6 @@ handle_message(boost::asio::ip::udp::endpoint &sender,
     std::cout << "  Benchmark scenario: ";
     switch (bs->scenario().type()) {
       case BenchmarkScenario::NONE: std::cout << "NONE"; break;
-      case BenchmarkScenario::FBM: std::cout << "FBM"; break;
       case BenchmarkScenario::TBM: std::cout << "TBM"; break;
     }
     std::cout << " " << bs->scenario().type_id();
@@ -228,25 +227,6 @@ handle_timer(const boost::system::error_code& error)
 
     // Send benchnmark feedback
     BenchmarkFeedback bf;
-    bf.mutable_object_pose()->mutable_position()->set_x(0.0);
-    bf.mutable_object_pose()->mutable_position()->set_y(0.0);
-    bf.mutable_object_pose()->mutable_position()->set_z(0.0);
-    bf.mutable_object_pose()->mutable_orientation()->set_w(1.0);
-    bf.mutable_object_pose()->mutable_orientation()->set_x(0.0);
-    bf.mutable_object_pose()->mutable_orientation()->set_y(0.0);
-    bf.mutable_object_pose()->mutable_orientation()->set_z(0.0);
-    /*
-    bf.mutable_end_effector_pose()->mutable_position()->set_x(0.0);
-    bf.mutable_end_effector_pose()->mutable_position()->set_y(0.0);
-    bf.mutable_end_effector_pose()->mutable_position()->set_z(0.0);
-    bf.mutable_end_effector_pose()->mutable_orientation()->set_w(1.0);
-    bf.mutable_end_effector_pose()->mutable_orientation()->set_x(0.0);
-    bf.mutable_end_effector_pose()->mutable_orientation()->set_y(0.0);
-    bf.mutable_end_effector_pose()->mutable_orientation()->set_z(0.0);
-    */
-    bf.set_object_instance_name("AX-01");
-    bf.set_object_class_name("aluminium");
-    bf.set_grasp_notification(true);
     bf.set_phase_to_terminate(current_benchmark_phase_);
     peer_public_->send(bf);
 

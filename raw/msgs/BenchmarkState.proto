@@ -38,7 +38,6 @@ message BenchmarkScenario {
   enum BenchmarkType {
     NONE = 0; // No benchmark running
     TBM  = 1; // Task benchmark
-    FBM  = 2; // Functionality benchmark
   }
 
   // e.g. TASK_BENCHMARK 1 "TBM 1: Assembly aid tray"

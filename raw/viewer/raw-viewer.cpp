@@ -219,10 +219,6 @@ bool idle_handler() {
           sstr_scenario << "None";
       break;
 
-      case raw_msgs::BenchmarkScenario::FBM:
-          sstr_scenario << "Functionality Benchmark " << benchmark_state->scenario().type_id();
-      break;
-
       case raw_msgs::BenchmarkScenario::TBM:
           sstr_scenario << "Task Benchmark " << benchmark_state->scenario().type_id();
       break;

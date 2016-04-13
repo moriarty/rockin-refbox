@@ -42,7 +42,4 @@ message BenchmarkInfo {
     COMP_ID  = 2000;
     MSG_TYPE = 104;
   }
-
-  // FBM1+FBM2
-  optional string object = 1;
 }

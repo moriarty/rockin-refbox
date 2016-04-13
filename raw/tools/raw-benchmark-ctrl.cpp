@@ -57,7 +57,6 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
     std::cout << "Benchmark Scenario: ";
     switch (s->scenario().type()) {
       case raw_msgs::BenchmarkScenario::NONE: std::cout << "NONE"; break;
-      case raw_msgs::BenchmarkScenario::FBM: std::cout << "FBM"; break;
       case raw_msgs::BenchmarkScenario::TBM: std::cout << "TBM"; break;
     }
     std::cout << s->scenario().type_id();
@@ -154,21 +153,9 @@ int main(int argc, char **argv)
     if (has_scenario) {
       raw_msgs::SetBenchmarkScenario cmd;
 
-      if (scenario == "fbm1") {
-        cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-        cmd.mutable_scenario()->set_type_id(1);
-      } else if (scenario == "fbm2") {
-        cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-        cmd.mutable_scenario()->set_type_id(2);
-      } else if (scenario == "fbm3") {
-        cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-        cmd.mutable_scenario()->set_type_id(3);
-      } else if (scenario == "tbm1") {
+      if (scenario == "tbm1") {
         cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
         cmd.mutable_scenario()->set_type_id(1);
-      } else if (scenario == "tbm2") {
-        cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
-        cmd.mutable_scenario()->set_type_id(2);
       } else if (scenario == "tbm3") {
         cmd.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
         cmd.mutable_scenario()->set_type_id(3);

@@ -34,16 +34,7 @@
 
   ; Benchmark times; seconds
   ?*TBM-TIME*               =  600
-  ?*FBM1-TIME*              =  120  ; per run
-  ?*FBM2-PREPARATION-TIME*  =   30
-  ?*FBM2-EXECUTION-TIME*    =  210  ; per run
-  ?*FBM3-CALIBRATION-TIME*  =   60
-  ?*FBM3-PREPARATION-TIME*  =   60
-  ?*FBM3-EXECUTION-TIME*    =  120  ; per run
 
   ; Benchmark repetitions
   ?*TBM-COUNT*    =  1
-  ?*FBM1-COUNT*   = 10
-  ?*FBM2-COUNT*   =  5
-  ?*FBM3-COUNT*   =  5
 )

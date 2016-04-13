@@ -56,13 +56,9 @@ bool idle_handler() {
     Gtk::Button *button_start = 0;
     Gtk::Button *button_pause = 0;
     Gtk::Button *button_stop = 0;
-    Gtk::Button *button_success = 0;
-    Gtk::Button *button_fail = 0;
     builder->get_widget("button_start", button_start);
     builder->get_widget("button_pause", button_pause);
     builder->get_widget("button_stop", button_stop);
-    builder->get_widget("button_success", button_success);
-    builder->get_widget("button_fail", button_fail);
 
     switch (benchmark_state->state()) {
       case raw_msgs::BenchmarkState::STOPPED:
@@ -94,18 +90,6 @@ bool idle_handler() {
             button_stop->set_sensitive(false);
         }
       break;
-    }
-
-    // Only activate in FBM2 during STOPPED or FINISHED state
-    if ((benchmark_state->scenario().type() == raw_msgs::BenchmarkScenario::FBM)
-        && (benchmark_state->scenario().type_id() == 2)
-        && ((benchmark_state->state() == raw_msgs::BenchmarkState::STOPPED)
-         || benchmark_state->state() == raw_msgs::BenchmarkState::FINISHED)) {
-      button_success->set_sensitive(true);
-      button_fail->set_sensitive(true);
-    } else {
-      button_success->set_sensitive(false);
-      button_fail->set_sensitive(false);
     }
   }
 
@@ -159,16 +143,7 @@ void on_reset_click()
   std::string benchmark = combobox_benchmark->get_active_text();
 
   raw_msgs::SetBenchmarkScenario cmd_scenario;
-  if (benchmark == "FBM1") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-    cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (benchmark == "FBM2") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-    cmd_scenario.mutable_scenario()->set_type_id(2);
-  } else if (benchmark == "FBM3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::FBM);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
-  } else if (benchmark == "TBM1") {
+  if (benchmark == "TBM1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
     cmd_scenario.mutable_scenario()->set_type_id(1);
   } else if (benchmark == "TBM3") {
@@ -184,28 +159,6 @@ void on_reset_click()
   raw_msgs::SetBenchmarkTransitionEvent cmd_event;
   cmd_event.set_event(raw_msgs::SetBenchmarkTransitionEvent::RESET);
   client.send(cmd_event);
-}
-
-
-void on_success_click()
-{
-  if (!client.connected()) return;
-
-  raw_msgs::BenchmarkFeedback msg;
-  msg.set_grasp_notification(true);
-  msg.set_phase_to_terminate(benchmark_state->phase());
-  client.send(msg);
-}
-
-
-void on_fail_click()
-{
-  if (!client.connected()) return;
-
-  raw_msgs::BenchmarkFeedback msg;
-  msg.set_grasp_notification(false);
-  msg.set_phase_to_terminate(benchmark_state->phase());
-  client.send(msg);
 }
 
 
@@ -249,16 +202,12 @@ int main(int argc, char **argv)
   Gtk::Button *button_start = 0;
   Gtk::Button *button_pause = 0;
   Gtk::Button *button_stop = 0;
-  Gtk::Button *button_success = 0;
-  Gtk::Button *button_fail = 0;
   Gtk::Button *button_reset = 0;
   Gtk::Button *button_cb_start = 0;
   Gtk::Button *button_cb_stop = 0;
   builder->get_widget("button_start", button_start);
   builder->get_widget("button_pause", button_pause);
   builder->get_widget("button_stop", button_stop);
-  builder->get_widget("button_success", button_success);
-  builder->get_widget("button_fail", button_fail);
   builder->get_widget("button_reset", button_reset);
   builder->get_widget("button_cb_start", button_cb_start);
   builder->get_widget("button_cb_stop", button_cb_stop);
@@ -267,8 +216,6 @@ int main(int argc, char **argv)
   button_start->signal_clicked().connect(sigc::ptr_fun(&on_start_click));
   button_pause->signal_clicked().connect(sigc::ptr_fun(&on_pause_click));
   button_stop->signal_clicked().connect(sigc::ptr_fun(&on_stop_click));
-  button_success->signal_clicked().connect(sigc::ptr_fun(&on_success_click));
-  button_fail->signal_clicked().connect(sigc::ptr_fun(&on_fail_click));
   button_reset->signal_clicked().connect(sigc::ptr_fun(&on_reset_click));
   button_cb_start->signal_clicked().connect(sigc::ptr_fun(&on_cb_start_click));
   button_cb_stop->signal_clicked().connect(sigc::ptr_fun(&on_cb_stop_click));

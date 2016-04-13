@@ -7,8 +7,7 @@
 (defclass BenchmarkScenario (is-a USER)
   ; NONE: No benchmark running
   ; TBM: task benchmark
-  ; FBM: functionality benchmark
-  (slot type (type SYMBOL) (allowed-values NONE TBM FBM) (default NONE))
+  (slot type (type SYMBOL) (allowed-values NONE TBM) (default NONE))
   (slot type-id (type INTEGER) (default 0))
   (slot description (type STRING) (default ""))
 )
