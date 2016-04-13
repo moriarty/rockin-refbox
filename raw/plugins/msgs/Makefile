@@ -1,8 +1,8 @@
 #*****************************************************************************
-#                      Makefile Build System for Fawkes
+#           Makefile Build System for LLSF RefBox: Logging Utils
 #                            -------------------
-#   Created on Wed Sep 06 02:39:46 2006
-#   Copyright (C) 2006 by Tim Niemueller, AllemaniACs RoboCup Team
+#   Created on Sat May 28 00:16:57 2011
+#   Copyright (C) 2006-2011 by Tim Niemueller, AllemaniACs RoboCup Team
 #
 #*****************************************************************************
 #
@@ -13,15 +13,13 @@
 #
 #*****************************************************************************
 
-BASEDIR = .
-
-SUBDIRS = src raw
-
-# Explicit dependencies, this is needed to have make bail out if there is any
-# error. This is also necessary for working parallel builds
-raw: src
-
+BASEDIR = ../../..
 include $(BASEDIR)/etc/buildsys/config.mk
-include $(BUILDSYSDIR)/rules.mk
-include $(BUILDSYSDIR)/root/root.mk
+include $(BASEDIR)/raw/raw.mk
+
+PROTOBUF_all = raw_plugin_msgs
+MSGS_raw_plugin_msgs = $(notdir $(patsubst %.proto,%,$(wildcard $(SRCDIR)/*.proto)))
+
+include $(BUILDSYSDIR)/protobuf.mk
+include $(BUILDSYSDIR)/base.mk
 
