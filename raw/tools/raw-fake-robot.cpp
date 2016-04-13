@@ -45,7 +45,6 @@
 #include <msgs/Inventory.pb.h>
 #include <msgs/Order.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
-#include <msgs/Camera.pb.h>
 #include <msgs/BenchmarkFeedback.pb.h>
 #include <msgs/RobotStatusReport.pb.h>
 #include <msgs/LoggingStatus.pb.h>
@@ -226,12 +225,6 @@ handle_timer(const boost::system::error_code& error)
     signal->set_seq(++seq_);
     peer_team_->send(signal);
 
-
-    // Request a camera image
-    /*
-    CameraCommand cam_cmd;
-    peer_team_->send(cam_cmd);
-    */
 
     // Send benchnmark feedback
     BenchmarkFeedback bf;

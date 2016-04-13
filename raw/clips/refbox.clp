@@ -25,11 +25,3 @@
   (printout t "Enabling Conveyor Belt" crlf)
   (load* (resolve-file device-conveyor-belt.clp))
 )
-
-(defrule load-device-quality-control-camera
-  (init)
-  (have-feature QualityControlCamera)
-  =>
-  (printout t "Enabling Quality Control Camera" crlf)
-  (load* (resolve-file device-quality-control-camera.clp))
-)
