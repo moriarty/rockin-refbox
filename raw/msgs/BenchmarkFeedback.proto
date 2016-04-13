@@ -34,7 +34,6 @@
 
 package raw_msgs;
 
-import "Pose3D.proto";
 import "BenchmarkState.proto";
 
 option java_package = "org.raw.common_msgs";
