@@ -8,8 +8,8 @@
 (defglobal
   ; network sending periods; seconds
   ?*BEACON-PERIOD* = 1.0
-  ?*BENCHMARKSTATE-PERIOD* = 0.1
-  ?*BENCHMARKINFO-PERIOD* = 0.1
+  ?*TESTSTATE-PERIOD* = 0.1
+  ?*TESTINFO-PERIOD* = 0.1
   ?*ROBOTINFO-PERIOD* = 0.25
   ?*INVENTORY-PERIOD* = 1.0
   ?*CONVEYOR-BELT-PERIOD* = 0.1
@@ -32,9 +32,9 @@
   ?*BC-VERSIONINFO-PERIOD* = 0.5
   ?*BC-VERSIONINFO-COUNT* = 10
 
-  ; Benchmark times; seconds
+  ; Test times; seconds
   ?*TBM-TIME*               =  600
 
-  ; Benchmark repetitions
+  ; Test repetitions
   ?*TBM-COUNT*    =  1
 )

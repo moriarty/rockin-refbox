@@ -31,23 +31,23 @@ package raw_msgs;
 import "Time.proto";
 
 option java_package = "org.raw.common_msgs";
-option java_outer_classname = "BenchmarkStateProtos";
+option java_outer_classname = "TestStateProtos";
 
 
-message BenchmarkScenario {
-  enum BenchmarkType {
-    NONE = 0; // No benchmark running
-    TBM  = 1; // Task benchmark
+message TestScenario {
+  enum TestType {
+    NONE = 0; // No test running
+    TBM  = 1; // Task test
   }
 
   // e.g. TASK_BENCHMARK 1 "TBM 1: Assembly aid tray"
-  required BenchmarkType type         = 1;
+  required TestType type         = 1;
   required uint32        type_id      = 2;
   optional string        description  = 3;
 }
 
 
-message BenchmarkState {
+message TestState {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 100;
@@ -66,17 +66,17 @@ message BenchmarkState {
     PREPARATION = 2;
   }
 
-  // Time since benchmark start
-  required Time benchmark_time = 1;
+  // Time since test start
+  required Time test_time = 1;
 
-  // Current benchmark state
+  // Current test state
   required State state = 3;
 
-  // Current benchmark phase
+  // Current test phase
   required Phase phase = 9;
 
-  // Current benchmark scenario
-  required BenchmarkScenario scenario = 4;
+  // Current test scenario
+  required TestScenario scenario = 4;
 
   // Name of all known teams
   repeated string known_teams = 5;
@@ -86,32 +86,32 @@ message BenchmarkState {
 }
 
 
-// Request setting of a new benchmark state
-message SetBenchmarkState {
+// Request setting of a new test state
+message SetTestState {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 101;
   }
 
   // The new desired state
-  required BenchmarkState.State state = 1;
+  required TestState.State state = 1;
 }
 
 
-// Request setting of a new benchmark scenario
-message SetBenchmarkScenario {
+// Request setting of a new test scenario
+message SetTestScenario {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 102;
   }
 
-  // The new desired benchmark
-  required BenchmarkScenario scenario = 1;
+  // The new desired test
+  required TestScenario scenario = 1;
 }
 
 
-// Message to control the benchmark state machine by requesting transitions
-message SetBenchmarkTransitionEvent {
+// Message to control the test state machine by requesting transitions
+message SetTestTransitionEvent {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 103;
@@ -119,7 +119,7 @@ message SetBenchmarkTransitionEvent {
 
   enum Event {
     // Transition from any state to STOPPED state and re-initialize the
-    // benchmark scenario (e.g. after setting a new benchmark scenario)
+    // test scenario (e.g. after setting a new test scenario)
     RESET = 0;
 
     // Transition from STOPPED or PAUSED to RUNNING state

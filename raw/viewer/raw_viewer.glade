@@ -26,7 +26,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="ypad">10</property>
-                    <property name="label" translatable="yes">Benchmark</property>
+                    <property name="label" translatable="yes">Test</property>
                     <attributes>
                       <attribute name="font-desc" value="Cantarell Bold 14"/>
                       <attribute name="foreground" value="#72729f9fcfcf"/>
@@ -53,7 +53,7 @@
                         <property name="left_padding">12</property>
                         <property name="right_padding">12</property>
                         <child>
-                          <object class="GtkLabel" id="label_benchmark_scenario">
+                          <object class="GtkLabel" id="label_test_scenario">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">None</property>

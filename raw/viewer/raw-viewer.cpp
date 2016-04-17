@@ -8,7 +8,7 @@
 #include <utils/system/argparser.h>
 
 #include <protobuf_comm/client.h>
-#include <msgs/BenchmarkState.pb.h>
+#include <msgs/TestState.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 #include <msgs/RobotInfo.pb.h>
 #include <msgs/AttentionMessage.pb.h>
@@ -28,7 +28,7 @@ Glib::RefPtr<Gtk::Builder> builder;
 std::vector<Gtk::Widget *> robot_widgets;
 std::chrono::time_point<std::chrono::system_clock> last_gui_update;
 boost::mutex mutex;
-std::shared_ptr<raw_msgs::BenchmarkState> benchmark_state;
+std::shared_ptr<raw_msgs::TestState> test_state;
 std::shared_ptr<raw_msgs::ConveyorBeltStatus> conveyor_belt_state;
 std::shared_ptr<raw_msgs::RobotInfo> robot_info;
 std::shared_ptr<raw_msgs::Inventory> inventory;
@@ -97,8 +97,8 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
   // Prevent simultaneous access to the refbox state from gui and network
   boost::mutex::scoped_lock lock(mutex);
 
-  if (std::dynamic_pointer_cast<raw_msgs::BenchmarkState>(msg)) {
-    benchmark_state = std::dynamic_pointer_cast<raw_msgs::BenchmarkState>(msg);
+  if (std::dynamic_pointer_cast<raw_msgs::TestState>(msg)) {
+    test_state = std::dynamic_pointer_cast<raw_msgs::TestState>(msg);
   }
 
   if (std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg)) {
@@ -137,12 +137,12 @@ bool idle_handler() {
   // Prevent simultaneous access to the refbox state from gui and network
   boost::mutex::scoped_lock lock(mutex);
 
-  if (benchmark_state) {
+  if (test_state) {
     // Time
     Gtk::Label *label_time = 0;
     builder->get_widget("label_time", label_time);
 
-    std::chrono::seconds time(benchmark_state->benchmark_time().sec());
+    std::chrono::seconds time(test_state->test_time().sec());
     std::chrono::minutes minutes = std::chrono::duration_cast<std::chrono::minutes>(time);
     std::chrono::seconds seconds = time - minutes;
 
@@ -158,23 +158,23 @@ bool idle_handler() {
     Pango::Attribute fg_color_state;
 
     Pango::AttrList attr_list_state = label_state->get_attributes();
-    switch (benchmark_state->state()) {
-      case raw_msgs::BenchmarkState::RUNNING:
+    switch (test_state->state()) {
+      case raw_msgs::TestState::RUNNING:
         fg_color_state = Pango::Attribute::create_attr_foreground(35466, 57825, 13364);
         label_state->set_text("Running");
       break;
 
-      case raw_msgs::BenchmarkState::PAUSED:
+      case raw_msgs::TestState::PAUSED:
         fg_color_state = Pango::Attribute::create_attr_foreground(13364, 25957, 42148);
         label_state->set_text("Paused");
       break;
 
-      case raw_msgs::BenchmarkState::FINISHED:
+      case raw_msgs::TestState::FINISHED:
         fg_color_state = Pango::Attribute::create_attr_foreground(61423, 10537, 10537);
         label_state->set_text("Finished");
       break;
 
-      case raw_msgs::BenchmarkState::STOPPED:
+      case raw_msgs::TestState::STOPPED:
         fg_color_state = Pango::Attribute::create_attr_foreground(61423, 10537, 10537);
         label_state->set_text("Stopped");
       break;
@@ -189,18 +189,18 @@ bool idle_handler() {
     Pango::Attribute fg_color_phase;
 
     Pango::AttrList attr_list_phase = label_phase->get_attributes();
-    switch (benchmark_state->phase()) {
-      case raw_msgs::BenchmarkState::EXECUTION:
+    switch (test_state->phase()) {
+      case raw_msgs::TestState::EXECUTION:
         fg_color_phase = Pango::Attribute::create_attr_foreground(35466, 57825, 13364);
         label_phase->set_text("Execution");
       break;
 
-      case raw_msgs::BenchmarkState::CALIBRATION:
+      case raw_msgs::TestState::CALIBRATION:
         fg_color_phase = Pango::Attribute::create_attr_foreground(61423, 10537, 10537);
         label_phase->set_text("Calibration");
       break;
 
-      case raw_msgs::BenchmarkState::PREPARATION:
+      case raw_msgs::TestState::PREPARATION:
         fg_color_phase = Pango::Attribute::create_attr_foreground(13364, 25957, 42148);
         label_phase->set_text("Preparation");
       break;
@@ -209,18 +209,18 @@ bool idle_handler() {
     label_phase->set_attributes(attr_list_phase);
 
 
-    // Benchmark scenario
+    // Test scenario
     Gtk::Label *label_scenario = 0;
-    builder->get_widget("label_benchmark_scenario", label_scenario);
+    builder->get_widget("label_test_scenario", label_scenario);
     std::stringstream sstr_scenario;
 
-    switch (benchmark_state->scenario().type()) {
-      case raw_msgs::BenchmarkScenario::NONE:
+    switch (test_state->scenario().type()) {
+      case raw_msgs::TestScenario::NONE:
           sstr_scenario << "None";
       break;
 
-      case raw_msgs::BenchmarkScenario::TBM:
-          sstr_scenario << "Task Benchmark " << benchmark_state->scenario().type_id();
+      case raw_msgs::TestScenario::TBM:
+          sstr_scenario << "Task Test " << test_state->scenario().type_id();
       break;
     }
     label_scenario->set_text(sstr_scenario.str());
@@ -345,7 +345,7 @@ int main(int argc, char **argv)
   config.load("config.yaml");
 
   protobuf_comm::MessageRegister &message_register = client.message_register();
-  message_register.add_message_type<raw_msgs::BenchmarkState>();
+  message_register.add_message_type<raw_msgs::TestState>();
   message_register.add_message_type<raw_msgs::ConveyorBeltStatus>();
   message_register.add_message_type<raw_msgs::RobotInfo>();
   message_register.add_message_type<raw_msgs::AttentionMessage>();

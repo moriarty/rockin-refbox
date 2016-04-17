@@ -1,5 +1,5 @@
 /***************************************************************************
- *  BenchmarkInfo.proto - RoboCup-at-Work Protocol - Info message for benchmark
+ *  TestInfo.proto - RoboCup-at-Work Protocol - Info message for test
  *
  *  Copyright  2014  Sven Schneider
  ****************************************************************************/
@@ -35,9 +35,9 @@
 package raw_msgs;
 
 option java_package = "org.raw.common_msgs";
-option java_outer_classname = "BenchmarkInfoProtos";
+option java_outer_classname = "TestInfoProtos";
 
-message BenchmarkInfo {
+message TestInfo {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 104;

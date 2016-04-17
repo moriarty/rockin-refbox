@@ -1,5 +1,5 @@
 /***************************************************************************
- *  BenchmarkFeedback.proto - RoboCup-at-Work Protocol - Feedback message for benchmark
+ *  TestFeedback.proto - RoboCup-at-Work Protocol - Feedback message for test
  *
  *  Copyright  2014  Sven Schneider
  ****************************************************************************/
@@ -34,25 +34,25 @@
 
 package raw_msgs;
 
-import "BenchmarkState.proto";
+import "TestState.proto";
 
 option java_package = "org.raw.common_msgs";
-option java_outer_classname = "BenchmarkFeedbackProtos";
+option java_outer_classname = "TestFeedbackProtos";
 
-message BenchmarkFeedback {
+message TestFeedback {
   enum CompType {
     COMP_ID  = 2000;
     MSG_TYPE = 110;
   }
 
-  // The benchmark phase to terminate
-  // The specification of the benchmark phase is especially important in FBMs.
+  // The test phase to terminate
+  // The specification of the test phase is especially important in FBMs.
   // To finish the FBM, the robot should continuously send out the feedback
-  // message until the phase in the benchmark state changes. To avoid
+  // message until the phase in the test state changes. To avoid
   // accidentally finishing the next phase via a burst of "old" feedback
   // messages, the desired phase that should be terminated is included in the
-  // benchmark feedback.
-  required BenchmarkState.Phase phase_to_terminate = 100;
+  // test feedback.
+  required TestState.Phase phase_to_terminate = 100;
 
   // TBM1
   optional string assembly_aid_tray_id = 5;

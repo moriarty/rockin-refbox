@@ -184,8 +184,8 @@
   (pb-destroy ?attmsg)
 )
 
-(defrule net-recv-SetBenchmarkScenario
-  ?mf <- (protobuf-msg (type "raw_msgs.SetBenchmarkScenario") (ptr ?p) (rcvd-via STREAM))
+(defrule net-recv-SetTestScenario
+  ?mf <- (protobuf-msg (type "raw_msgs.SetTestScenario") (ptr ?p) (rcvd-via STREAM))
   =>
   (retract ?mf) ; message will be destroyed after rule completes
 
@@ -194,19 +194,19 @@
   (bind ?pb-scenario-type (pb-field-value ?pb-scenario "type"))
   (bind ?pb-scenario-type-id (pb-field-value ?pb-scenario "type_id"))
 
-  (send [benchmark] request-scenario ?pb-scenario-type ?pb-scenario-type-id)
+  (send [test] request-scenario ?pb-scenario-type ?pb-scenario-type-id)
 )
 
-(defrule net-recv-SetBenchmarkScenario-illegal
-  ?mf <- (protobuf-msg (type "raw_msgs.SetBenchmarkScenario") (ptr ?p)
+(defrule net-recv-SetTestScenario-illegal
+  ?mf <- (protobuf-msg (type "raw_msgs.SetTestScenario") (ptr ?p)
            (rcvd-via BROADCAST) (rcvd-from ?host ?port))
   =>
   (retract ?mf) ; message will be destroyed after rule completes
-  (printout warn "Illegal SetBenchmarkScenario message received from host " ?host crlf)
+  (printout warn "Illegal SetTestScenario message received from host " ?host crlf)
 )
 
-(defrule net-recv-SetBenchmarkTransitionEvent
-  ?mf <- (protobuf-msg (type "raw_msgs.SetBenchmarkTransitionEvent") (ptr ?p)
+(defrule net-recv-SetTestTransitionEvent
+  ?mf <- (protobuf-msg (type "raw_msgs.SetTestTransitionEvent") (ptr ?p)
            (rcvd-via STREAM) (rcvd-from ?host ?port))
   =>
   (retract ?mf) ; message will be destroyed after rule completes
@@ -214,95 +214,95 @@
   (bind ?pb-event (pb-field-value ?p "event"))
 
   (if (eq ?pb-event RESET) then
-    (send [benchmark] switch-scenario)
+    (send [test] switch-scenario)
   else
     (printout t "RECV TRANSITION EVENT: " ?pb-event crlf)
-    (bind ?state-machine (send [benchmark] get-state-machine))
+    (bind ?state-machine (send [test] get-state-machine))
     (send ?state-machine process-event ?pb-event)
   )
 )
 
-(defrule net-recv-SetBenchmarkTransitionEvent-illegal
-  ?mf <- (protobuf-msg (type "raw_msgs.SetBenchmarkTransitionEvent") (ptr ?p)
+(defrule net-recv-SetTestTransitionEvent-illegal
+  ?mf <- (protobuf-msg (type "raw_msgs.SetTestTransitionEvent") (ptr ?p)
            (rcvd-via BROADCAST) (rcvd-from ?host ?port))
   =>
   (retract ?mf) ; message will be destroyed after rule completes
-  (printout warn "Illegal SetBenchmarkTransitionEvent message received from host " ?host crlf)
+  (printout warn "Illegal SetTestTransitionEvent message received from host " ?host crlf)
 )
 
-(deffunction net-create-BenchmarkState ()
-  (bind ?benchmarkstate (pb-create "raw_msgs.BenchmarkState"))
-  (bind ?benchmarkstate-time (pb-field-value ?benchmarkstate "benchmark_time"))
+(deffunction net-create-TestState ()
+  (bind ?teststate (pb-create "raw_msgs.TestState"))
+  (bind ?teststate-time (pb-field-value ?teststate "test_time"))
 
-  ; Set the benchmark time (in seconds)
-  (if (eq (type ?benchmarkstate-time) EXTERNAL-ADDRESS) then
-    (bind ?bt (send [benchmark] get-time))
+  ; Set the test time (in seconds)
+  (if (eq (type ?teststate-time) EXTERNAL-ADDRESS) then
+    (bind ?bt (send [test] get-time))
     (bind ?time (time-from-sec (send ?bt get-timer)))
-    (pb-set-field ?benchmarkstate-time "sec" (nth$ 1 ?time))
-    (pb-set-field ?benchmarkstate-time "nsec" (integer (* (nth$ 2 ?time) 1000)))
-    (pb-set-field ?benchmarkstate "benchmark_time" ?benchmarkstate-time) ; destroys ?benchmarkstate-time!
+    (pb-set-field ?teststate-time "sec" (nth$ 1 ?time))
+    (pb-set-field ?teststate-time "nsec" (integer (* (nth$ 2 ?time) 1000)))
+    (pb-set-field ?teststate "test_time" ?teststate-time) ; destroys ?teststate-time!
   )
 
-  ; Add the current scenario (e.g. TBM1 or TBM3) of the benchmark
-  (bind ?current-scenario (send [benchmark] get-current-scenario))
-  (bind ?pb-benchmark-scenario (send ?current-scenario create-msg))
-  (pb-set-field ?benchmarkstate "scenario" ?pb-benchmark-scenario)
+  ; Add the current scenario (e.g. TBM1 or TBM3) of the test
+  (bind ?current-scenario (send [test] get-current-scenario))
+  (bind ?pb-test-scenario (send ?current-scenario create-msg))
+  (pb-set-field ?teststate "scenario" ?pb-test-scenario)
 
   ; Add all known teams
   (do-for-all-facts ((?team known-team)) TRUE
-    (pb-add-list ?benchmarkstate "known_teams" ?team:name)
+    (pb-add-list ?teststate "known_teams" ?team:name)
   )
 
-  ; Set the benchmark state (e.g. PAUSED or RUNNING) based on the state machine
-  (bind ?state-machine (send [benchmark] get-state-machine))
+  ; Set the test state (e.g. PAUSED or RUNNING) based on the state machine
+  (bind ?state-machine (send [test] get-state-machine))
   (bind ?current-state (send ?state-machine get-current-state))
   (bind ?robot-state (send ?current-state to-robot-state))
-  (pb-set-field ?benchmarkstate "state" ?robot-state)
+  (pb-set-field ?teststate "state" ?robot-state)
 
   (bind ?robot-phase (send ?current-state to-robot-phase))
-  (pb-set-field ?benchmarkstate "phase" ?robot-phase)
+  (pb-set-field ?teststate "phase" ?robot-phase)
 
-  (return ?benchmarkstate)
+  (return ?teststate)
 )
 
-(defrule net-send-BenchmarkState
+(defrule net-send-TestState
   (time $?now)
-  ?f <- (signal (type benchmark-state) (time $?t&:(timeout ?now ?t ?*BENCHMARKSTATE-PERIOD*)) (seq ?seq))
+  ?f <- (signal (type test-state) (time $?t&:(timeout ?now ?t ?*TESTSTATE-PERIOD*)) (seq ?seq))
   (network-peer (group "PUBLIC") (id ?peer-id-public))
   =>
   (modify ?f (time ?now) (seq (+ ?seq 1)))
-  (bind ?benchmark-state (net-create-BenchmarkState))
+  (bind ?test-state (net-create-TestState))
 
-  (pb-broadcast ?peer-id-public ?benchmark-state)
+  (pb-broadcast ?peer-id-public ?test-state)
 
   (do-for-all-facts ((?client network-client)) TRUE
-    (pb-send ?client:id ?benchmark-state)
+    (pb-send ?client:id ?test-state)
   )
-  (pb-destroy ?benchmark-state)
+  (pb-destroy ?test-state)
 )
 
-(deffunction net-create-BenchmarkInfo (?info)
-  (bind ?bi (pb-create "raw_msgs.BenchmarkInfo"))
+(deffunction net-create-TestInfo (?info)
+  (bind ?bi (pb-create "raw_msgs.TestInfo"))
 
   (pb-set-field ?bi "object" (fact-slot-value ?info object))
 
   (return ?bi)
 )
 
-(defrule net-send-BenchmarkInfo
+(defrule net-send-TestInfo
   (time $?now)
-  ?f <- (signal (type benchmark-info) (time $?t&:(timeout ?now ?t ?*BENCHMARKINFO-PERIOD*)) (seq ?seq))
-  ;(benchmark-info ?info)
-  ?info <- (benchmark-info)
+  ?f <- (signal (type test-info) (time $?t&:(timeout ?now ?t ?*TESTINFO-PERIOD*)) (seq ?seq))
+  ;(test-info ?info)
+  ?info <- (test-info)
   =>
   (modify ?f (time ?now) (seq (+ ?seq 1)))
-  (bind ?benchmark-info (net-create-BenchmarkInfo ?info))
+  (bind ?test-info (net-create-TestInfo ?info))
 
   (do-for-all-facts ((?client network-client)) TRUE
-    (pb-send ?client:id ?benchmark-info)
+    (pb-send ?client:id ?test-info)
   )
 
-  (pb-destroy ?benchmark-info)
+  (pb-destroy ?test-info)
 )
 
 (deffunction net-create-RobotInfo ()
@@ -356,8 +356,8 @@
   (bind ?item-count (length (send [inventory] get-items)))
   (if (>= ?item-count 23)
    then
-    (printout t "Too many items in the inventory! Please reset the benchmark" crlf)
-    (assert (attention-message (text "Too many items in the inventory! Please reset the benchmark")))
+    (printout t "Too many items in the inventory! Please reset the test" crlf)
+    (assert (attention-message (text "Too many items in the inventory! Please reset the test")))
     (return)
   )
 
@@ -489,8 +489,8 @@
   )
 )
 
-(defrule net-recv-BenchmarkFeedback
-  ?mf <- (protobuf-msg (type "raw_msgs.BenchmarkFeedback") (ptr ?p)
+(defrule net-recv-TestFeedback
+  ?mf <- (protobuf-msg (type "raw_msgs.TestFeedback") (ptr ?p)
          (rcvd-at $?rcvd-at) (rcvd-from ?host ?port) (client-type PEER))
   (robot (name ?name) (team ?team) (host ?host))
   =>
@@ -500,7 +500,7 @@
   (bind ?phase-to-terminate (pb-field-value ?p "phase_to_terminate"))
 
   ; Identify the currently active phase
-  (bind ?state-machine (send [benchmark] get-state-machine))
+  (bind ?state-machine (send [test] get-state-machine))
   (bind ?current-state (send ?state-machine get-current-state))
   (bind ?current-phase (send ?current-state to-robot-phase))
 
@@ -512,13 +512,13 @@
   )
 
 
-  ; Forward the feedback to the benchmark's feedback handler
-  (bind ?command (send [benchmark] handle-feedback ?p ?rcvd-at ?name ?team))
+  ; Forward the feedback to the test's feedback handler
+  (bind ?command (send [test] handle-feedback ?p ?rcvd-at ?name ?team))
 
-  ; Simply return if the benchmark should continue
+  ; Simply return if the test should continue
   (if (eq ?command CONTINUE) then (return))
 
-  ; Switch the state if the benchmark should finish
+  ; Switch the state if the test should finish
   (bind ?state-pre (send ?state-machine get-current-state))
   (send ?state-machine process-event FINISH)
   (bind ?state-post (send ?state-machine get-current-state))

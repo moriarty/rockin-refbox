@@ -46,11 +46,11 @@
   (slot cycle (type INTEGER) (default 0))
 )
 
-(deftemplate benchmark-info
+(deftemplate test-info
   (slot object (type STRING) (default ""))
 )
 
-(deftemplate benchmark-feedback
+(deftemplate test-feedback
   (slot source (type SYMBOL))
   (multislot time (type INTEGER) (cardinality 2 2) (default (create$ 0 0)))
   (slot type (type SYMBOL) (allowed-values SELECTED STARTED TIMEOUT))
@@ -60,8 +60,8 @@
 (deffacts startup
   (signal (type version-info) (time (create$ 0 0)) (seq 1))
   (signal (type beacon) (time (create$ 0 0)) (seq 1))
-  (signal (type benchmark-state) (time (create$ 0 0)) (seq 1))
-  (signal (type benchmark-info) (time (create$ 0 0)) (seq 1))
+  (signal (type test-state) (time (create$ 0 0)) (seq 1))
+  (signal (type test-info) (time (create$ 0 0)) (seq 1))
   (signal (type robot-info) (time (create$ 0 0)) (seq 1))
   (signal (type order-info) (time (create$ 0 0)) (seq 1))
   (signal (type inventory) (time (create$ 0 0)) (seq 1))

@@ -1,40 +1,40 @@
 ;---------------------------------------------------------------------------
-;  benchmark.clp - RoboCup-at-Work RefBox CLIPS benchmark
+;  test.clp - RoboCup-at-Work RefBox CLIPS test
 ;
 ;  Licensed under BSD license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 
-(defclass BenchmarkScenario (is-a USER)
-  ; NONE: No benchmark running
-  ; TBM: task benchmark
+(defclass TestScenario (is-a USER)
+  ; NONE: No test running
+  ; TBM: task test
   (slot type (type SYMBOL) (allowed-values NONE TBM) (default NONE))
   (slot type-id (type INTEGER) (default 0))
   (slot description (type STRING) (default ""))
 )
 
-(defmessage-handler BenchmarkScenario create-msg ()
-  "Create a ProtoBuf message for a benchmark scenario description"
+(defmessage-handler TestScenario create-msg ()
+  "Create a ProtoBuf message for a test scenario description"
 
-  (bind ?pb-benchmark-scenario (pb-create "raw_msgs.BenchmarkScenario"))
+  (bind ?pb-test-scenario (pb-create "raw_msgs.TestScenario"))
  
-  (pb-set-field ?pb-benchmark-scenario "type" ?self:type)
-  (pb-set-field ?pb-benchmark-scenario "type_id" ?self:type-id)
-  (pb-set-field ?pb-benchmark-scenario "description" ?self:description)
+  (pb-set-field ?pb-test-scenario "type" ?self:type)
+  (pb-set-field ?pb-test-scenario "type_id" ?self:type-id)
+  (pb-set-field ?pb-test-scenario "description" ?self:description)
 
-  (return ?pb-benchmark-scenario)
+  (return ?pb-test-scenario)
 )
 
-(defmessage-handler BenchmarkScenario setup (?time ?state-machine)
+(defmessage-handler TestScenario setup (?time ?state-machine)
 )
 
-(defmessage-handler BenchmarkScenario handle-feedback (?pb-msg ?time ?name ?team)
+(defmessage-handler TestScenario handle-feedback (?pb-msg ?time ?name ?team)
   (return CONTINUE)
 )
 
 
-(defclass NoneBenchmarkScenario (is-a BenchmarkScenario) (role concrete))
+(defclass NoneTestScenario (is-a TestScenario) (role concrete))
 
-(defmessage-handler NoneBenchmarkScenario setup (?time ?state-machine)
+(defmessage-handler NoneTestScenario setup (?time ?state-machine)
   (make-instance [init-state] of InitState)
 
   (make-instance ?state-machine of StateMachine
@@ -44,19 +44,19 @@
 )
 
 
-(defclass Benchmark (is-a USER)
-  (slot current-scenario (type INSTANCE) (allowed-classes BenchmarkScenario))
-  (slot requested-scenario (type INSTANCE) (allowed-classes BenchmarkScenario))
-  (multislot registered-scenarios (type INSTANCE) (allowed-classes BenchmarkScenario))
+(defclass Test (is-a USER)
+  (slot current-scenario (type INSTANCE) (allowed-classes TestScenario))
+  (slot requested-scenario (type INSTANCE) (allowed-classes TestScenario))
+  (multislot registered-scenarios (type INSTANCE) (allowed-classes TestScenario))
 
-  ; time that the benchmark is running
-  (slot time (type INSTANCE) (allowed-classes BenchmarkTime))
+  ; time that the test is running
+  (slot time (type INSTANCE) (allowed-classes TestTime))
 
-  ; State machine that coordinates the benchmark execution
+  ; State machine that coordinates the test execution
   (slot state-machine (type INSTANCE) (allowed-classes StateMachine))
 )
 
-(defmessage-handler Benchmark switch-scenario ()
+(defmessage-handler Test switch-scenario ()
   (send ?self put-current-scenario ?self:requested-scenario)
 
 
@@ -83,7 +83,7 @@
   (send ?self:current-scenario setup ?self:time ?self:state-machine)
 )
 
-(defmessage-handler Benchmark request-scenario (?type ?type-id)
+(defmessage-handler Test request-scenario (?type ?type-id)
   (foreach ?scenario (send ?self get-registered-scenarios)
     (bind ?scenario-type (send ?scenario get-type))
     (bind ?scenario-type-id (send ?scenario get-type-id))
@@ -95,32 +95,32 @@
     )
   )
 
-  (printout t "Requested benchmark scenario " ?type ?type-id " does not exist" crlf)
+  (printout t "Requested test scenario " ?type ?type-id " does not exist" crlf)
 )
 
-(defmessage-handler Benchmark handle-feedback (?pb-msg ?time ?name ?team)
+(defmessage-handler Test handle-feedback (?pb-msg ?time ?name ?team)
   (bind ?scenario (send ?self get-current-scenario))
   (return (send ?scenario handle-feedback ?pb-msg ?time ?name ?team))
 )
 
 
-(defrule init-benchmark
+(defrule init-test
   (init)
   =>
-  (make-instance [NONE] of NoneBenchmarkScenario (type NONE) (type-id 0) (description "No benchmark running"))
+  (make-instance [NONE] of NoneTestScenario (type NONE) (type-id 0) (description "No test running"))
 
-  (make-instance [benchmark] of Benchmark
-    (time (make-instance of BenchmarkTime))
+  (make-instance [test] of Test
+    (time (make-instance of TestTime))
     (registered-scenarios [NONE])
   )
 
-  (send [benchmark] request-scenario NONE 0)
-  (send [benchmark] switch-scenario)
+  (send [test] request-scenario NONE 0)
+  (send [test] switch-scenario)
 )
 
-(defrule benchmark-update
+(defrule test-update
   (time $?now)
-  ?bm <- (object (is-a Benchmark))
+  ?bm <- (object (is-a Test))
   =>
   (bind ?state-machine (send ?bm get-state-machine))
   (send ?state-machine update)

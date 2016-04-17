@@ -8,8 +8,8 @@
 #include <utils/system/argparser.h>
 
 #include <protobuf_comm/client.h>
-#include <msgs/BenchmarkState.pb.h>
-#include <msgs/BenchmarkFeedback.pb.h>
+#include <msgs/TestState.pb.h>
+#include <msgs/TestFeedback.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 
 #include <gtkmm.h>
@@ -24,7 +24,7 @@ int port;
 Glib::RefPtr<Gtk::Builder> builder;
 std::chrono::time_point<std::chrono::system_clock> last_gui_update;
 boost::mutex mutex;
-std::shared_ptr<raw_msgs::BenchmarkState> benchmark_state;
+std::shared_ptr<raw_msgs::TestState> test_state;
 
 
 
@@ -34,8 +34,8 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
   // Prevent simultaneous access to the refbox state from gui and network
   boost::mutex::scoped_lock lock(mutex);
 
-  if (std::dynamic_pointer_cast<raw_msgs::BenchmarkState>(msg)) {
-    benchmark_state = std::dynamic_pointer_cast<raw_msgs::BenchmarkState>(msg);
+  if (std::dynamic_pointer_cast<raw_msgs::TestState>(msg)) {
+    test_state = std::dynamic_pointer_cast<raw_msgs::TestState>(msg);
   }
 }
 
@@ -52,7 +52,7 @@ bool idle_handler() {
   // Prevent simultaneous access to the refbox state from gui and network
   boost::mutex::scoped_lock lock(mutex);
 
-  if (benchmark_state) {
+  if (test_state) {
     Gtk::Button *button_start = 0;
     Gtk::Button *button_pause = 0;
     Gtk::Button *button_stop = 0;
@@ -60,27 +60,27 @@ bool idle_handler() {
     builder->get_widget("button_pause", button_pause);
     builder->get_widget("button_stop", button_stop);
 
-    switch (benchmark_state->state()) {
-      case raw_msgs::BenchmarkState::STOPPED:
+    switch (test_state->state()) {
+      case raw_msgs::TestState::STOPPED:
         button_start->set_sensitive(true);
         button_pause->set_sensitive(false);
         button_stop->set_sensitive(false);
       break;
 
-      case raw_msgs::BenchmarkState::RUNNING:
+      case raw_msgs::TestState::RUNNING:
         button_start->set_sensitive(false);
         button_pause->set_sensitive(true);
         button_stop->set_sensitive(true);
       break;
 
-      case raw_msgs::BenchmarkState::PAUSED:
+      case raw_msgs::TestState::PAUSED:
         button_start->set_sensitive(true);
         button_pause->set_sensitive(false);
         button_stop->set_sensitive(false);
       break;
 
-      case raw_msgs::BenchmarkState::FINISHED:
-        if (benchmark_state->phase() == raw_msgs::BenchmarkState::EXECUTION) {
+      case raw_msgs::TestState::FINISHED:
+        if (test_state->phase() == raw_msgs::TestState::EXECUTION) {
             button_start->set_sensitive(false);
             button_pause->set_sensitive(false);
             button_stop->set_sensitive(false);
@@ -108,8 +108,8 @@ void on_start_click()
 {
   if (!client.connected()) return;
 
-  raw_msgs::SetBenchmarkTransitionEvent cmd_event;
-  cmd_event.set_event(raw_msgs::SetBenchmarkTransitionEvent::START);
+  raw_msgs::SetTestTransitionEvent cmd_event;
+  cmd_event.set_event(raw_msgs::SetTestTransitionEvent::START);
   client.send(cmd_event);
 }
 
@@ -118,8 +118,8 @@ void on_pause_click()
 {
   if (!client.connected()) return;
 
-  raw_msgs::SetBenchmarkTransitionEvent cmd_event;
-  cmd_event.set_event(raw_msgs::SetBenchmarkTransitionEvent::PAUSE);
+  raw_msgs::SetTestTransitionEvent cmd_event;
+  cmd_event.set_event(raw_msgs::SetTestTransitionEvent::PAUSE);
   client.send(cmd_event);
 }
 
@@ -128,8 +128,8 @@ void on_stop_click()
 {
   if (!client.connected()) return;
 
-  raw_msgs::SetBenchmarkTransitionEvent cmd_event;
-  cmd_event.set_event(raw_msgs::SetBenchmarkTransitionEvent::STOP);
+  raw_msgs::SetTestTransitionEvent cmd_event;
+  cmd_event.set_event(raw_msgs::SetTestTransitionEvent::STOP);
   client.send(cmd_event);
 }
 
@@ -138,26 +138,26 @@ void on_reset_click()
 {
   if (!client.connected()) return;
 
-  Gtk::ComboBoxText *combobox_benchmark = 0;
-  builder->get_widget("combobox_benchmark", combobox_benchmark);
-  std::string benchmark = combobox_benchmark->get_active_text();
+  Gtk::ComboBoxText *combobox_test = 0;
+  builder->get_widget("combobox_test", combobox_test);
+  std::string test = combobox_test->get_active_text();
 
-  raw_msgs::SetBenchmarkScenario cmd_scenario;
-  if (benchmark == "TBM1") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
+  raw_msgs::SetTestScenario cmd_scenario;
+  if (test == "TBM1") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::TBM);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (benchmark == "TBM3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::TBM);
+  } else if (test == "TBM3") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::TBM);
     cmd_scenario.mutable_scenario()->set_type_id(3);
-  } else if (benchmark == "None") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::BenchmarkScenario::NONE);
+  } else if (test == "None") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::NONE);
     cmd_scenario.mutable_scenario()->set_type_id(0);
   }
   client.send(cmd_scenario);
 
 
-  raw_msgs::SetBenchmarkTransitionEvent cmd_event;
-  cmd_event.set_event(raw_msgs::SetBenchmarkTransitionEvent::RESET);
+  raw_msgs::SetTestTransitionEvent cmd_event;
+  cmd_event.set_event(raw_msgs::SetTestTransitionEvent::RESET);
   client.send(cmd_event);
 }
 
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
   config.load("config.yaml");
 
   protobuf_comm::MessageRegister &message_register = client.message_register();
-  message_register.add_message_type<raw_msgs::BenchmarkState>();
+  message_register.add_message_type<raw_msgs::TestState>();
 
 
   Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.raw.controller");

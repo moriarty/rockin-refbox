@@ -75,26 +75,26 @@
 (defclass InitState (is-a State) (role concrete))
 
 (defclass StoppedState (is-a State) (role concrete)
-  ; benchmark time is shared between several states
-  (slot time (type INSTANCE) (allowed-classes BenchmarkTime))
+  ; test time is shared between several states
+  (slot time (type INSTANCE) (allowed-classes TestTime))
 )
 
 (defclass RunningState (is-a State) (role concrete)
   (slot max-time (type FLOAT) (default 0.0))
 
-  ; benchmark time is shared between several states
-  (slot time (type INSTANCE) (allowed-classes BenchmarkTime))
+  ; test time is shared between several states
+  (slot time (type INSTANCE) (allowed-classes TestTime))
 
   ; cardinality 2: sec msec
   (multislot last-time (type INTEGER) (cardinality 2 2) (default 0 0))
 )
 (defclass PausedState (is-a State) (role concrete))
 (defclass CheckRunsState (is-a State) (role concrete)
-  (slot run (type INTEGER) (default 0))             ; how often the specific benchmark has been executed already
+  (slot run (type INTEGER) (default 0))             ; how often the specific test has been executed already
   (slot max-runs (type INTEGER) (default 1))
 
-  ; benchmark time is shared between several states
-  (slot time (type INSTANCE) (allowed-classes BenchmarkTime))
+  ; test time is shared between several states
+  (slot time (type INSTANCE) (allowed-classes TestTime))
 )
 (defclass FinishedState (is-a State) (role concrete))
 
@@ -106,10 +106,10 @@
 
 
 (defmessage-handler StoppedState on-exit (?next-state)
-  (printout t "Starting benchmark " crlf)
-  (assert (attention-message (text "Starting benchmark") (time 15)))
+  (printout t "Starting test " crlf)
+  (assert (attention-message (text "Starting test") (time 15)))
 
-  ; reset the times of the benchmark
+  ; reset the times of the test
   (send ?self:time put-start-time (now))
   (send ?self:time put-timer 0.0)
 )
@@ -126,7 +126,7 @@
 )
 
 (defmessage-handler RunningState on-update ()
-  ; continuously update the benchmark time
+  ; continuously update the test time
   (bind ?now (now))
   (bind ?timediff (time-diff-sec ?now ?self:last-time))
   (bind ?time (send ?self:time get-timer))
@@ -146,13 +146,13 @@
 
 
 (defmessage-handler PausedState on-enter (?prev-state)
-  (printout t "Pausing benchmark " crlf)
-  (assert (attention-message (text "Pausing benchmark") (time 15)))
+  (printout t "Pausing test " crlf)
+  (assert (attention-message (text "Pausing test") (time 15)))
 )
 
 (defmessage-handler PausedState on-exit (?next-state)
-  (printout t "Continuing benchmark " crlf)
-  (assert (attention-message (text "Continuing benchmark") (time 15)))
+  (printout t "Continuing test " crlf)
+  (assert (attention-message (text "Continuing test") (time 15)))
 )
 
 (defmessage-handler PausedState to-robot-state ()
@@ -176,8 +176,8 @@
   (bind ?state-machine (send ?self get-state-machine))
 
   (if (>= ?self:run ?self:max-runs) then
-    (printout t "Benchmark over" crlf)
-    (assert (attention-message (text "Benchmark over") (time 15)))
+    (printout t "Test over" crlf)
+    (assert (attention-message (text "Test over") (time 15)))
     (send ?state-machine process-event FINISH)
   else
     (send ?state-machine process-event REPEAT)
