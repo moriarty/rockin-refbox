@@ -33,8 +33,8 @@
   ?*BC-VERSIONINFO-COUNT* = 10
 
   ; Test times; seconds
-  ?*TBM-TIME*               =  600
+  ?*BNT-TIME*               =  600
 
   ; Test repetitions
-  ?*TBM-COUNT*    =  1
+  ?*BNT-COUNT*    =  1
 )

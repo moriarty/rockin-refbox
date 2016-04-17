@@ -37,13 +37,13 @@ option java_outer_classname = "TestStateProtos";
 message TestScenario {
   enum TestType {
     NONE = 0; // No test running
-    TBM  = 1; // Task test
+    BNT  = 1; // Task test
   }
 
-  // e.g. TASK_BENCHMARK 1 "TBM 1: Assembly aid tray"
+  // e.g. Basic Navigation Test 1 "BNT 1: Basic Navigation Test"
   required TestType type         = 1;
-  required uint32        type_id      = 2;
-  optional string        description  = 3;
+  required uint32   type_id      = 2;
+  optional string   description  = 3;
 }
 
 

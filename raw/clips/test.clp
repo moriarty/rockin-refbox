@@ -6,8 +6,8 @@
 
 (defclass TestScenario (is-a USER)
   ; NONE: No test running
-  ; TBM: task test
-  (slot type (type SYMBOL) (allowed-values NONE TBM) (default NONE))
+  ; BNT:  Basic Navigation Test
+  (slot type (type SYMBOL) (allowed-values NONE BNT) (default NONE))
   (slot type-id (type INTEGER) (default 0))
   (slot description (type STRING) (default ""))
 )

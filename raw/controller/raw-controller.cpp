@@ -143,11 +143,11 @@ void on_reset_click()
   std::string test = combobox_test->get_active_text();
 
   raw_msgs::SetTestScenario cmd_scenario;
-  if (test == "TBM1") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::TBM);
+  if (test == "BNT1") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BNT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "TBM3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::TBM);
+  } else if (test == "BNT3") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BNT);
     cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "None") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::NONE);

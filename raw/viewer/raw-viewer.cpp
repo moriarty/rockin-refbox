@@ -219,8 +219,8 @@ bool idle_handler() {
           sstr_scenario << "None";
       break;
 
-      case raw_msgs::TestScenario::TBM:
-          sstr_scenario << "Task Test " << test_state->scenario().type_id();
+      case raw_msgs::TestScenario::BNT:
+          sstr_scenario << "Basic Navigation Test " << test_state->scenario().type_id();
       break;
     }
     label_scenario->set_text(sstr_scenario.str());

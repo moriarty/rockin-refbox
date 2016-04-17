@@ -1,17 +1,17 @@
 ;---------------------------------------------------------------------------
-;  task-tests.clp - RoboCup-at-Work RefBox CLIPS task tests
+;  basic-navigation-tests.clp - RoboCup-at-Work RefBox CLIPS BNTs
 ;
 ;  Licensed under BSD license, cf. LICENSE file
 ;---------------------------------------------------------------------------
 
-(defclass TaskTest1 (is-a TestScenario) (role concrete))
-(defclass TaskTest3 (is-a TestScenario) (role concrete))
+(defclass BasicNavigationTest1 (is-a TestScenario) (role concrete))
+(defclass BasicNavigationTest3 (is-a TestScenario) (role concrete))
 
-(defmessage-handler TaskTest1 setup (?time ?state-machine)
+(defmessage-handler BasicNavigationTest1 setup (?time ?state-machine)
   (make-instance [stopped-state] of StoppedState
     (phase EXECUTION) (state-machine ?state-machine) (time ?time))
   (make-instance [running-state] of RunningState
-    (phase EXECUTION) (state-machine ?state-machine) (time ?time) (max-time ?*TBM-TIME*))
+    (phase EXECUTION) (state-machine ?state-machine) (time ?time) (max-time ?*BNT-TIME*))
   (make-instance [paused-state] of PausedState
     (phase EXECUTION) (state-machine ?state-machine))
   (make-instance [finished-state] of FinishedState
@@ -72,25 +72,25 @@
   )
 )
 
-(defmessage-handler TaskTest1 handle-feedback (?pb-msg ?time ?name ?team)
+(defmessage-handler BasicNavigationTest1 handle-feedback (?pb-msg ?time ?name ?team)
   (if (and
        (pb-has-field ?pb-msg "assembly_aid_tray_id")
        (pb-has-field ?pb-msg "container_id"))
    then
-    (return CONTINUE)   ; TBM feedback is valid -> continue the test
+    (return CONTINUE)   ; BNT feedback is valid -> continue the test
    else
-    (return FINISH)     ; TBM feedback is invalid -> finish the test
+    (return FINISH)     ; BNT feedback is invalid -> finish the test
   )
 )
 
 
 
 
-(defmessage-handler TaskTest3 setup (?time ?state-machine)
+(defmessage-handler BasicNavigationTest3 setup (?time ?state-machine)
   (make-instance [stopped-state] of StoppedState
     (phase EXECUTION) (state-machine ?state-machine) (time ?time))
   (make-instance [running-state] of RunningState
-    (phase EXECUTION) (state-machine ?state-machine) (time ?time) (max-time ?*TBM-TIME*))
+    (phase EXECUTION) (state-machine ?state-machine) (time ?time) (max-time ?*BNT-TIME*))
   (make-instance [paused-state] of PausedState
     (phase EXECUTION) (state-machine ?state-machine))
   (make-instance [finished-state] of FinishedState
@@ -181,13 +181,13 @@
 
 
 
-(defrule init-tbm
+(defrule init-bnt
   (init)
   ?bm <- (object (is-a Test))
   =>
-  (make-instance [TBM1] of TaskTest1 (type TBM) (type-id 1) (description "Prepare Assembly Aid Tray"))
-  (make-instance [TBM3] of TaskTest3 (type TBM) (type-id 3) (description "Fill a Box with Parts for Manual Assembly"))
+  (make-instance [BNT1] of BasicNavigationTest1 (type BNT) (type-id 1) (description "Prepare Assembly Aid Tray"))
+  (make-instance [BNT3] of BasicNavigationTest3 (type BNT) (type-id 3) (description "Fill a Box with Parts for Manual Assembly"))
 
-  (slot-insert$ ?bm registered-scenarios 1 [TBM1])
-  (slot-insert$ ?bm registered-scenarios 1 [TBM3])
+  (slot-insert$ ?bm registered-scenarios 1 [BNT1])
+  (slot-insert$ ?bm registered-scenarios 1 [BNT3])
 )
