@@ -222,6 +222,14 @@ bool idle_handler() {
       case raw_msgs::TestScenario::BNT:
           sstr_scenario << "Basic Navigation Test " << test_state->scenario().type_id();
       break;
+
+      case raw_msgs::TestScenario::BMT:
+          sstr_scenario << "Basic Manipulation Test " << test_state->scenario().type_id();
+      break;
+
+      case raw_msgs::TestScenario::BTT:
+          sstr_scenario << "Basic Transportation Test " << test_state->scenario().type_id();
+      break;
     }
     label_scenario->set_text(sstr_scenario.str());
   }

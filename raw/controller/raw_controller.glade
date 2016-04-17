@@ -161,6 +161,10 @@
                           <item translatable="yes">None</item>
                           <item translatable="yes">BNT1</item>
                           <item translatable="yes">BNT3</item>
+                          <item translatable="yes">BMT1</item>
+                          <item translatable="yes">BMT3</item>
+                          <item translatable="yes">BTT1</item>
+                          <item translatable="yes">BTT3</item>
                         </items>
                       </object>
                       <packing>

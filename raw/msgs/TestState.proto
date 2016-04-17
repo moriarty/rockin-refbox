@@ -37,7 +37,9 @@ option java_outer_classname = "TestStateProtos";
 message TestScenario {
   enum TestType {
     NONE = 0; // No test running
-    BNT  = 1; // Task test
+    BNT  = 1; // basic navigation test
+    BMT  = 2; // basic manipulation test
+    BTT  = 3; // basic transportation test
   }
 
   // e.g. Basic Navigation Test 1 "BNT 1: Basic Navigation Test"

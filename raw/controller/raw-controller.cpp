@@ -149,6 +149,18 @@ void on_reset_click()
   } else if (test == "BNT3") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BNT);
     cmd_scenario.mutable_scenario()->set_type_id(3);
+  } else if (test == "BMT1") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BMT);
+    cmd_scenario.mutable_scenario()->set_type_id(1);
+  } else if (test == "BMT3") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BMT);
+    cmd_scenario.mutable_scenario()->set_type_id(3);
+  } else if (test == "BTT1") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BTT);
+    cmd_scenario.mutable_scenario()->set_type_id(1);
+  } else if (test == "BTT3") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BTT);
+    cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "None") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::NONE);
     cmd_scenario.mutable_scenario()->set_type_id(0);

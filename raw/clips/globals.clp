@@ -34,7 +34,11 @@
 
   ; Test times; seconds
   ?*BNT-TIME*               =  600
+  ?*BMT-TIME*               =  600
+  ?*BTT-TIME*               =  600
 
   ; Test repetitions
   ?*BNT-COUNT*    =  1
+  ?*BMT-COUNT*    =  1
+  ?*BTT-COUNT*    =  1
 )

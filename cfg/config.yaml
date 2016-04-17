@@ -3,7 +3,7 @@
 # Main configuration document
 
 llsfrb:
-  plugins: "conveyor_belt"
+  plugins: "" #"conveyor_belt"
 
   log:
     level: info
@@ -20,7 +20,7 @@ llsfrb:
     command_port: !tcp-port 55523
 
   clips:
-    dir: "@BASEDIR@/rockin/clips"
+    dir: "@BASEDIR@/raw/clips"
     # Timer interval, in milliseconds
     timer-interval: 40
 
@@ -30,12 +30,12 @@ llsfrb:
     debug-level: 2
     unwatch-facts: [time, signal]
     unwatch-rules: [retract-time,
-                    net-send-beacon, net-send-BenchmarkState, net-send-OrderInfo,
-                    net-send-Inventory, net-send-VersionInfo,
-                    net-send-ConveyorBeltStatus]
+                    net-send-beacon, net-send-TestState, net-send-OrderInfo,
+                    net-send-Inventory, net-send-VersionInfo] #,
+                    #net-send-ConveyorBeltStatus]
 
   comm:
-    protobuf-dirs: ["@BASEDIR@/rockin/msgs"]
+    protobuf-dirs: ["@BASEDIR@/raw/msgs"]
 
     server-port: !tcp-port 4444
 
@@ -51,20 +51,9 @@ llsfrb:
       send-port: !udp-port 4446
       recv-port: !udp-port 4447
 
-    smARTLab-peer:
-      host: !ipv4 192.168.1.255
-      port: !udp-port 4448
-      #send-port: !udp-port 4448
-      #recv-port: !udp-port 4449
-
-    SPQR-peer:
-      host: !ipv4 192.168.1.255
-      port: !udp-port 4450
-      #send-port: !udp-port 4450
-      #recv-port: !udp-port 4451
 
   mongodb:
-    enable: true
+    enable: false
     hostport: localhost
     collections:
       text-log: llsfrb.log
@@ -72,11 +61,9 @@ llsfrb:
       protobuf: llsfrb.protobuf
 
   game:
-    teams: [b-it-bots, smARTLab, SPQR]
+    teams: [b-it-bots]
     crypto-keys:
       b-it-bots: randomkey
-      smARTLab: randomkey
-      SPQR: randomkey
 
   shell:
     refbox-host: !ipv4 127.0.0.1

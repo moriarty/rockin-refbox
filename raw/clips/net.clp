@@ -189,7 +189,7 @@
   =>
   (retract ?mf) ; message will be destroyed after rule completes
 
-  ; Get the scenario type (NONE, BNT) and type id from the message
+  ; Get the scenario type (NONE, BNT, BMT) and type id from the message
   (bind ?pb-scenario (pb-field-value ?p "scenario"))
   (bind ?pb-scenario-type (pb-field-value ?pb-scenario "type"))
   (bind ?pb-scenario-type-id (pb-field-value ?pb-scenario "type_id"))
@@ -243,7 +243,7 @@
     (pb-set-field ?teststate "test_time" ?teststate-time) ; destroys ?teststate-time!
   )
 
-  ; Add the current scenario (e.g. BNT1 or BNT3) of the test
+  ; Add the current scenario (e.g. BNT1 or BMT3) of the test
   (bind ?current-scenario (send [test] get-current-scenario))
   (bind ?pb-test-scenario (send ?current-scenario create-msg))
   (pb-set-field ?teststate "scenario" ?pb-test-scenario)

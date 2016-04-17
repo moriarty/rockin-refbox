@@ -7,7 +7,9 @@
 (defclass TestScenario (is-a USER)
   ; NONE: No test running
   ; BNT:  Basic Navigation Test
-  (slot type (type SYMBOL) (allowed-values NONE BNT) (default NONE))
+  ; BMT:  Basic Manipulation Test
+  ; BTT:  Basic Transportation Test
+  (slot type (type SYMBOL) (allowed-values NONE BNT BMT BTT) (default NONE))
   (slot type-id (type INTEGER) (default 0))
   (slot description (type STRING) (default ""))
 )
