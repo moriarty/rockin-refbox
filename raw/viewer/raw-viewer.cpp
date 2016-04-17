@@ -230,6 +230,18 @@ bool idle_handler() {
       case raw_msgs::TestScenario::BTT:
           sstr_scenario << "Basic Transportation Test " << test_state->scenario().type_id();
       break;
+
+      case raw_msgs::TestScenario::PPT:
+          sstr_scenario << "Precision Placement Test " << test_state->scenario().type_id();
+      break;
+
+      case raw_msgs::TestScenario::CBT:
+          sstr_scenario << "Conveyor Belt Test " << test_state->scenario().type_id();
+      break;
+
+      case raw_msgs::TestScenario::RFT:
+          sstr_scenario << "Robocup Final Test " << test_state->scenario().type_id();
+      break;
     }
     label_scenario->set_text(sstr_scenario.str());
   }

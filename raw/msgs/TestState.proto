@@ -40,6 +40,9 @@ message TestScenario {
     BNT  = 1; // basic navigation test
     BMT  = 2; // basic manipulation test
     BTT  = 3; // basic transportation test
+    PPT  = 4; // precision placement test
+    CBT  = 5; // conveyor belt test
+    RFT  = 6; // robocup final test
   }
 
   // e.g. Basic Navigation Test 1 "BNT 1: Basic Navigation Test"
