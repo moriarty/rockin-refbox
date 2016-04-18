@@ -5,7 +5,7 @@
 ;---------------------------------------------------------------------------
 
 (defclass ConveyorBeltTest1 (is-a TestScenario) (role concrete))
-(defclass ConveyorBeltTest3 (is-a TestScenario) (role concrete))
+(defclass ConveyorBeltTest2 (is-a TestScenario) (role concrete))
 
 (defmessage-handler ConveyorBeltTest1 setup (?time ?state-machine)
   (make-instance [stopped-state] of StoppedState
@@ -86,7 +86,7 @@
 
 
 
-(defmessage-handler ConveyorBeltTest3 setup (?time ?state-machine)
+(defmessage-handler ConveyorBeltTest2 setup (?time ?state-machine)
   (make-instance [stopped-state] of StoppedState
     (phase EXECUTION) (state-machine ?state-machine) (time ?time))
   (make-instance [running-state] of RunningState
@@ -185,9 +185,9 @@
   (init)
   ?bm <- (object (is-a Test))
   =>
-  (make-instance [CBT1] of ConveyorBeltTest1 (type CBT) (type-id 1) (description "Prepare Assembly Aid Tray"))
-  (make-instance [CBT3] of ConveyorBeltTest3 (type CBT) (type-id 3) (description "Fill a Box with Parts for Manual Assembly"))
+  (make-instance [CBT1] of ConveyorBeltTest1 (type CBT) (type-id 1) (description "cbt 1"))
+  (make-instance [CBT2] of ConveyorBeltTest2 (type CBT) (type-id 2) (description "cbt 2"))
 
   (slot-insert$ ?bm registered-scenarios 1 [CBT1])
-  (slot-insert$ ?bm registered-scenarios 1 [CBT3])
+  (slot-insert$ ?bm registered-scenarios 1 [CBT2])
 )

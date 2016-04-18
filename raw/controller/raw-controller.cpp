@@ -143,44 +143,34 @@ void on_reset_click()
   std::string test = combobox_test->get_active_text();
 
   raw_msgs::SetTestScenario cmd_scenario;
-  if (test == "BNT1") {
+  if        (test == "BNT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BNT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "BNT3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BNT);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "BMT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BMT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "BMT3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BMT);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "BTT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BTT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
+  } else if (test == "BTT2") {
+    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BTT);
+    cmd_scenario.mutable_scenario()->set_type_id(2);
   } else if (test == "BTT3") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::BTT);
     cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "PPT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::PPT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "PPT3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::PPT);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
   } else if (test == "CBT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::CBT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "CBT3") {
+  } else if (test == "CBT2") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::CBT);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
+    cmd_scenario.mutable_scenario()->set_type_id(2);
   } else if (test == "RFT1") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::RFT);
     cmd_scenario.mutable_scenario()->set_type_id(1);
-  } else if (test == "RFT3") {
-    cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::RFT);
-    cmd_scenario.mutable_scenario()->set_type_id(3);
-  } 
-  else if (test == "None") {
+  } else if (test == "None") {
     cmd_scenario.mutable_scenario()->set_type(raw_msgs::TestScenario::NONE);
     cmd_scenario.mutable_scenario()->set_type_id(0);
   }

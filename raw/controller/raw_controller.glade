@@ -160,17 +160,14 @@
                         <items>
                           <item translatable="yes">None</item>
                           <item translatable="yes">BNT1</item>
-                          <item translatable="yes">BNT3</item>
                           <item translatable="yes">BMT1</item>
-                          <item translatable="yes">BMT3</item>
                           <item translatable="yes">BTT1</item>
+                          <item translatable="yes">BTT2</item>
                           <item translatable="yes">BTT3</item>
                           <item translatable="yes">PPT1</item>
-                          <item translatable="yes">PPT3</item>
                           <item translatable="yes">CBT1</item>
-                          <item translatable="yes">CBT3</item>
+                          <item translatable="yes">CBT2</item>
                           <item translatable="yes">RFT1</item>
-                          <item translatable="yes">RFT3</item>
                         </items>
                       </object>
                       <packing>
