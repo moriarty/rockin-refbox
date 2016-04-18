@@ -55,7 +55,7 @@ message TestScenario {
 message TestState {
   enum CompType {
     COMP_ID  = 2000;
-    MSG_TYPE = 100;
+    MSG_TYPE = 500;
   }
 
   enum State {

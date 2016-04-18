@@ -36,6 +36,10 @@
   (slot id (type INTEGER))
 )
 
+(deftemplate task-specification
+  (slot taskspec (type STRING) (default "<None>"))
+)
+
 (deftemplate attention-message
   (slot team (type STRING) (default ""))
   (slot text (type STRING))
@@ -62,6 +66,7 @@
   (signal (type beacon) (time (create$ 0 0)) (seq 1))
   (signal (type test-state) (time (create$ 0 0)) (seq 1))
   (signal (type test-info) (time (create$ 0 0)) (seq 1))
+  (signal (type task-specification) (time (create$ 0 0)) (seq 1))
   (signal (type robot-info) (time (create$ 0 0)) (seq 1))
   (signal (type order-info) (time (create$ 0 0)) (seq 1))
   (signal (type inventory) (time (create$ 0 0)) (seq 1))

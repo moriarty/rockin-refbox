@@ -371,6 +371,34 @@
   (pb-destroy ?pb-inventory)
 )
 
+(deffunction net-create-TaskSpecification(?spec)
+  (bind ?ts (pb-create "raw_msgs.TaskSpecification"))
+
+  (pb-set-field ?ts "task_spec" (fact-slot-value ?spec taskspec))
+
+  (return ?ts)
+)
+
+(defrule net-send-TaskSpecification
+  (time $?now)
+  ?sf <- (signal (type task-specification) (seq ?seq) (count ?count)
+     (time $?t&:(timeout ?now ?t (if (> ?count ?*BC-TASKSPECIFICATION-BURST-COUNT*)
+                 then ?*BC-TASKSPECIFICATION-PERIOD*
+                 else ?*BC-TASKSPECIFICATION-BURST-PERIOD*))))
+  (network-peer (group "PUBLIC") (id ?peer-id-public))
+  ?spec <- (task-specification)
+  =>
+  (modify ?sf (time ?now) (seq (+ ?seq 1)) (count (+ ?count 1)))
+
+  (bind ?task-specification (net-create-TaskSpecification ?spec))
+  (pb-broadcast ?peer-id-public ?task-specification)
+
+  (do-for-all-facts ((?client network-client)) TRUE
+    (pb-send ?client:id ?task-specification)
+  )
+  (pb-destroy ?task-specification)
+)
+
 (defrule net-send-OrderInfo
   (time $?now)
   ?sf <- (signal (type order-info) (seq ?seq) (count ?count)

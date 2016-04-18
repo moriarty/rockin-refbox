@@ -30,56 +30,13 @@
   )
 
 
-  (bind ?shelf-locations (create$ [shelf-01] [shelf-02] [shelf-03] [shelf-04]
-        [shelf-05] [shelf-06] [shelf-07] [shelf-08] [shelf-09] [shelf-10]
-        [shelf-11] [shelf-12]))
+  (assert (task-specification (taskspec "BMT<S2,S2,S3,line(M20_100,F20_20_G,F20_20_B,S40_40_B,S40_40_G,R20,M30),EXIT>")))
+  (assert (attention-message (text "BMT Task Spec Set")))
 
-  ; Randomize a location for EM-01-01
-  (bind ?em-01-01-location (pick-random$ ?shelf-locations))
-
-  ; The location of EM-01-01 should should not be reused
-  (bind ?shelf-locations (delete-member$ ?shelf-locations ?em-01-01-location))
-
-  ; Inventory
-  (slot-insert$ [inventory] items 1
-    ;;;;;;;;;;;;;;;;;;;;
-    ; Assembly aid trays
-    ;;;;;;;;;;;;;;;;;;;;
-
-    ; Assembly aid tray EM-01-01 at random location
-    (make-instance of Item (object-id [em-01-01]) (location-id ?em-01-01-location))
-
-    ;;;;;;;;;;;;;;;
-    ; Bearing boxes
-    ;;;;;;;;;;;;;;;
-
-    ; 1 bearing box at random location
-    (make-instance of Item (object-id [ax-01]) (location-id (pick-random$ ?shelf-locations)) (quantity 1))
-
-    ; 1 bearing box at random location
-    (make-instance of Item (object-id [ax-01]) (location-id (pick-random$ ?shelf-locations)) (quantity 1))
-  )
-
-
-  ; Orders
-  (slot-insert$ [order-info] orders 1
-    ; Deliver 2 items of AX-01 to EM-01-01
-    (make-instance of Order (status OFFERED) (object-id [ax-01]) (container-id [em-01-01]) (quantity-requested 2))
-
-    ; Deliver container EM-01-01 to location WS-03
-    (make-instance of Order (status OFFERED) (object-id [em-01-01]) (destination-id [workstation-03]))
-  )
 )
 
 (defmessage-handler BasicManipulationTest1 handle-feedback (?pb-msg ?time ?name ?team)
-  (if (and
-       (pb-has-field ?pb-msg "assembly_aid_tray_id")
-       (pb-has-field ?pb-msg "container_id"))
-   then
-    (return CONTINUE)   ; BMT feedback is valid -> continue the test
-   else
-    (return FINISH)     ; BMT feedback is invalid -> finish the test
-  )
+  (return FINISH)     ; BMT feedback is invalid -> finish the test
 )
 
 

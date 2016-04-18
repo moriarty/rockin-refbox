@@ -30,17 +30,15 @@
     (current-state [stopped-state])
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
+
+  (assert (task-specification (taskspec 
+"BTT<initialsituation(<S5,(R20,M30,S40_40_B)><S2,(S40_40_G,M20,R20)><S3,(F20_20_B,M20_100,F20_20_G)>);goalsituation(<C1,line(M20_100,M30,M20)><S4,line(F20_20_G,R20,R20)><S1,line(S40_40_B,S40_40_G,F20_20_B)>)>")))
+
+  (assert (attention-message (text "BTT Task Spec Set")))
 )
 
 (defmessage-handler BasicTransportationTest1 handle-feedback (?pb-msg ?time ?name ?team)
-  (if (and
-       (pb-has-field ?pb-msg "assembly_aid_tray_id")
-       (pb-has-field ?pb-msg "container_id"))
-   then
-    (return CONTINUE)   ; BTT feedback is valid -> continue the test
-   else
-    (return FINISH)     ; BTT feedback is invalid -> finish the test
-  )
+  (return FINISH)     ; BTT feedback is invalid -> finish the test
 )
 
 
@@ -66,6 +64,15 @@
     (current-state [stopped-state])
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
+
+  (assert (task-specification (taskspec
+"BTT<initialsituation(<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>);goalsituation(<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>")))
+
+  (assert (attention-message (text "BTT Task Spec Set")))
+)
+
+(defmessage-handler BasicTransportationTest2 handle-feedback (?pb-msg ?time ?name ?team)
+  (return FINISH)     ; BTT feedback is invalid -> finish the test
 )
 
 (defmessage-handler BasicTransportationTest3 setup (?time ?state-machine)
@@ -90,9 +97,16 @@
     (current-state [stopped-state])
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
+  (assert (task-specification (taskspec
+"BTT<initialsituation(<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>);goalsituation(<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>")))
+
+  (assert (attention-message (text "BTT Task Spec Set")))
+
 )
 
-
+(defmessage-handler BasicTransportationTest3 handle-feedback (?pb-msg ?time ?name ?team)
+  (return FINISH)     ; BTT feedback is invalid -> finish the test
+)
 
 
 (defrule init-btt

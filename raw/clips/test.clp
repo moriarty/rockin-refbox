@@ -9,7 +9,10 @@
   ; BNT:  Basic Navigation Test
   ; BMT:  Basic Manipulation Test
   ; BTT:  Basic Transportation Test
-  (slot type (type SYMBOL) (allowed-values NONE BNT BMT BTT) (default NONE))
+  ; PPT:  Percision Placement Test
+  ; CBT:  Conveyor Belt Test
+  ; RFT:  Robocup Final Test
+  (slot type (type SYMBOL) (allowed-values NONE BNT BMT BTT PPT CBT RFT) (default NONE))
   (slot type-id (type INTEGER) (default 0))
   (slot description (type STRING) (default ""))
 )

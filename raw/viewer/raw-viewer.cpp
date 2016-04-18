@@ -9,6 +9,7 @@
 
 #include <protobuf_comm/client.h>
 #include <msgs/TestState.pb.h>
+#include <msgs/TaskSpecification.pb.h>
 #include <msgs/ConveyorBelt.pb.h>
 #include <msgs/RobotInfo.pb.h>
 #include <msgs/AttentionMessage.pb.h>
@@ -29,6 +30,7 @@ std::vector<Gtk::Widget *> robot_widgets;
 std::chrono::time_point<std::chrono::system_clock> last_gui_update;
 boost::mutex mutex;
 std::shared_ptr<raw_msgs::TestState> test_state;
+std::shared_ptr<raw_msgs::TaskSpecification> task_specification;
 std::shared_ptr<raw_msgs::ConveyorBeltStatus> conveyor_belt_state;
 std::shared_ptr<raw_msgs::RobotInfo> robot_info;
 std::shared_ptr<raw_msgs::Inventory> inventory;
@@ -99,6 +101,10 @@ void handle_message(uint16_t comp_id, uint16_t msg_type,
 
   if (std::dynamic_pointer_cast<raw_msgs::TestState>(msg)) {
     test_state = std::dynamic_pointer_cast<raw_msgs::TestState>(msg);
+  }
+
+  if (std::dynamic_pointer_cast<raw_msgs::TaskSpecification>(msg)) {
+    task_specification = std::dynamic_pointer_cast<raw_msgs::TaskSpecification>(msg);
   }
 
   if (std::dynamic_pointer_cast<raw_msgs::ConveyorBeltStatus>(msg)) {
@@ -212,38 +218,59 @@ bool idle_handler() {
     // Test scenario
     Gtk::Label *label_scenario = 0;
     builder->get_widget("label_test_scenario", label_scenario);
-    std::stringstream sstr_scenario;
+    Gtk::Label *label_task_specification_type = 0;
+    builder->get_widget("label_task_specification_type", label_task_specification_type);
 
+    std::stringstream sstr_scenario;
+    std::stringstream sstr_task;
     switch (test_state->scenario().type()) {
       case raw_msgs::TestScenario::NONE:
           sstr_scenario << "None";
+          sstr_task << "None";
       break;
 
       case raw_msgs::TestScenario::BNT:
           sstr_scenario << "Basic Navigation Test " << test_state->scenario().type_id();
+          sstr_task << "BNT";
       break;
 
       case raw_msgs::TestScenario::BMT:
           sstr_scenario << "Basic Manipulation Test " << test_state->scenario().type_id();
+          sstr_task << "BMT";
       break;
 
       case raw_msgs::TestScenario::BTT:
           sstr_scenario << "Basic Transportation Test " << test_state->scenario().type_id();
+          sstr_task << "BTT";
       break;
 
       case raw_msgs::TestScenario::PPT:
           sstr_scenario << "Precision Placement Test " << test_state->scenario().type_id();
+          sstr_task << "PPT";
       break;
 
       case raw_msgs::TestScenario::CBT:
           sstr_scenario << "Conveyor Belt Test " << test_state->scenario().type_id();
+          sstr_task << "CBT";
       break;
 
       case raw_msgs::TestScenario::RFT:
           sstr_scenario << "Robocup Final Test " << test_state->scenario().type_id();
+          sstr_task << "RFT";
       break;
     }
     label_scenario->set_text(sstr_scenario.str());
+    label_task_specification_type->set_text(sstr_task.str());
+  }
+
+
+  if (task_specification) {
+    Gtk::Label *label_task_specification = 0;
+    builder->get_widget("label_task_specification", label_task_specification);
+
+    std::stringstream sstr;
+    sstr << task_specification->task_spec() ;
+    label_task_specification->set_text(sstr.str());
   }
 
 
@@ -366,6 +393,7 @@ int main(int argc, char **argv)
 
   protobuf_comm::MessageRegister &message_register = client.message_register();
   message_register.add_message_type<raw_msgs::TestState>();
+  message_register.add_message_type<raw_msgs::TaskSpecification>();
   message_register.add_message_type<raw_msgs::ConveyorBeltStatus>();
   message_register.add_message_type<raw_msgs::RobotInfo>();
   message_register.add_message_type<raw_msgs::AttentionMessage>();
