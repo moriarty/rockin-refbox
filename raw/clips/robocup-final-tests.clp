@@ -29,7 +29,8 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec (str-cat  
+  (modify-instance [task-specification]
+    (task-spec (str-cat
     "RFT<initialsituation("
       "<S5,(R20,M30,S40_40_B)>"
 ;      "<S2,(S40_40_G,M20,R20)>"
@@ -40,7 +41,7 @@
 ;      "<S4,line(F20_20_G,R20,R20)>"
 ;      "<S1,line(S40_40_B,S40_40_G,F20_20_B)>"
      ")>"
-  ))))
+  )))
 
   (assert (attention-message (text "RFT Task Set")))
 
@@ -56,6 +57,8 @@
   ?bm <- (object (is-a Test))
   =>
   (make-instance [RFT1] of RobocupFinalTest1 (type RFT) (type-id 1) (description "Robocup Final Test"))
+  (make-instance [RFT2] of RobocupFinalTest1 (type RFT) (type-id 1) (description "Robocup Final Test"))
 
   (slot-insert$ ?bm registered-scenarios 1 [RFT1])
+  (slot-insert$ ?bm registered-scenarios 1 [RFT2])
 )

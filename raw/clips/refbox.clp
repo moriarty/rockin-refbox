@@ -7,6 +7,7 @@
 (load* (resolve-file location.clp))
 (load* (resolve-file object-identifier.clp))
 (load* (resolve-file item.clp))
+(load* (resolve-file task-specification.clp))
 (load* (resolve-file inventory.clp))
 (load* (resolve-file order.clp))
 (load* (resolve-file order-info.clp))

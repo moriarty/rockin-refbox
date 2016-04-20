@@ -30,7 +30,9 @@
   )
 
 
-  (assert (task-specification (taskspec "BMT<S2,S2,S3,line(M20_100,F20_20_G,F20_20_B,S40_40_B,S40_40_G,R20,M30),EXIT>")))
+  (modify-instance [task-specification]
+    (task-spec "BMT<S2,S2,S3,line(M20_100,F20_20_G,F20_20_B,S40_40_B,S40_40_G,R20,M30),EXIT>")
+  )
   (assert (attention-message (text "BMT Task Spec Set")))
 
 )

@@ -30,7 +30,7 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec "CBT<C1>")))
+  (modify-instance [task-specification] (task-spec "CBT<C1>"))
 
   (assert (attention-message (text "CBT Task Set")))
 )
@@ -62,7 +62,7 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec "CBT<C2>")))
+  (modify-instance [task-specification] (task-spec "CBT<C2>"))
 
   (assert (attention-message (text "CBT Task Set")))
 )

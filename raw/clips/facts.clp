@@ -36,10 +36,6 @@
   (slot id (type INTEGER))
 )
 
-(deftemplate task-specification
-  (slot taskspec (type STRING) (default "<None>"))
-)
-
 (deftemplate attention-message
   (slot team (type STRING) (default ""))
   (slot text (type STRING))
@@ -62,15 +58,15 @@
 
 
 (deffacts startup
-  (signal (type version-info) (time (create$ 0 0)) (seq 1))
-  (signal (type beacon) (time (create$ 0 0)) (seq 1))
-  (signal (type test-state) (time (create$ 0 0)) (seq 1))
-  (signal (type test-info) (time (create$ 0 0)) (seq 1))
-  (signal (type task-specification) (time (create$ 0 0)) (seq 1))
-  (signal (type robot-info) (time (create$ 0 0)) (seq 1))
-  (signal (type order-info) (time (create$ 0 0)) (seq 1))
-  (signal (type inventory) (time (create$ 0 0)) (seq 1))
-  (signal (type conveyor-belt) (time (create$ 0 0)) (seq 1))
+  (signal (type version-info)            (time (create$ 0 0)) (seq 1))
+  (signal (type beacon)                  (time (create$ 0 0)) (seq 1))
+  (signal (type test-state)              (time (create$ 0 0)) (seq 1))
+  (signal (type test-info)               (time (create$ 0 0)) (seq 1))
+  (signal (type task-specification)      (time (create$ 0 0)) (seq 1))
+  (signal (type robot-info)              (time (create$ 0 0)) (seq 1))
+  (signal (type order-info)              (time (create$ 0 0)) (seq 1))
+  (signal (type inventory)               (time (create$ 0 0)) (seq 1))
+  (signal (type conveyor-belt)           (time (create$ 0 0)) (seq 1))
   (signal (type triggered-conveyor-belt) (time (create$ 0 0)) (seq 1))
 
   (triggered-conveyor-belt)

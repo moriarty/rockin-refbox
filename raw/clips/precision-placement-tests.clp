@@ -29,7 +29,9 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec "PPT<S3,(S40_40_B,M20,F20_20_B),S4>")))
+  (modify-instance [task-specification]
+    (task-spec "PPT<S3,(S40_40_B,M20,F20_20_B),S4>"
+  ))
 
   (assert (attention-message (text "PPT Task Spec Set")))
 

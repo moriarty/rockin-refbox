@@ -46,6 +46,7 @@
     (current-state [init-state])
     (states [init-state])
   )
+
 )
 
 
@@ -63,7 +64,6 @@
 
 (defmessage-handler Test switch-scenario ()
   (send ?self put-current-scenario ?self:requested-scenario)
-
 
   ; Remove all items from the inventory
   (do-for-all-instances ((?inventory Inventory))

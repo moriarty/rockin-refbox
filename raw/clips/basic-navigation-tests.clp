@@ -29,8 +29,9 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec "BNT<(C1,W,3),(S1,E,3),(T3,N,3),(S3,S,3),(T1,S,3),(D1,E,3),(S4,N,3),(S5,N,3),(T4,W,3),(T2,S,3),(S2,E,3)>")))
-
+  (modify-instance [task-specification]
+    (task-spec "BNT<(C1,W,3),(S1,E,3),(T3,N,3),(S3,S,3),(T1,S,3),(D1,E,3),(S4,N,3),(S5,N,3),(T4,W,3),(T2,S,3),(S2,E,3)>")
+  )
   (assert (attention-message (text "BNT Task Spec Set")))
 
 )

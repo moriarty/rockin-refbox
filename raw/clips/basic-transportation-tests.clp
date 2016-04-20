@@ -31,8 +31,17 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec 
-"BTT<initialsituation(<S5,(R20,M30,S40_40_B)><S2,(S40_40_G,M20,R20)><S3,(F20_20_B,M20_100,F20_20_G)>);goalsituation(<C1,line(M20_100,M30,M20)><S4,line(F20_20_G,R20,R20)><S1,line(S40_40_B,S40_40_G,F20_20_B)>)>")))
+  (modify-instance [task-specification]
+    (task-spec (str-cat
+      "BTT<initialsituation("
+        "<S5,(R20,M30,S40_40_B)>"
+        "<S2,(S40_40_G,M20,R20)>"
+        "<S3,(F20_20_B,M20_100,F20_20_G)>"
+      ");goalsituation("
+        "<C1,line(M20_100,M30,M20)>"
+        "<S4,line(F20_20_G,R20,R20)>"
+        "<S1,line(S40_40_B,S40_40_G,F20_20_B)>)>"
+  )))
 
   (assert (attention-message (text "BTT Task Spec Set")))
 )
@@ -65,8 +74,13 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec
-"BTT<initialsituation(<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>);goalsituation(<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>")))
+  (modify-instance [task-specification]
+    (task-spec (str-cat
+      "BTT<initialsituation("
+        "<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>"
+      ");goalsituation("
+        "<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>"
+  )))
 
   (assert (attention-message (text "BTT Task Spec Set")))
 )
@@ -97,8 +111,13 @@
     (current-state [stopped-state])
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
-  (assert (task-specification (taskspec
-"BTT<initialsituation(<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>);goalsituation(<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>")))
+  (modify-instance [task-specification]
+    (task-spec (str-cat
+      "BTT<initialsituation("
+        "<S3,(S40_40_B,F20_20_B,F20_20_B,M20)>"
+      ");goalsituation("
+        "<S1,line(S40_40_B,F20_20_B,F20_20_B,M20)>)>"
+  )))
 
   (assert (attention-message (text "BTT Task Spec Set")))
 

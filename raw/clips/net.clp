@@ -371,26 +371,25 @@
   (pb-destroy ?pb-inventory)
 )
 
-(deffunction net-create-TaskSpecification(?spec)
-  (bind ?ts (pb-create "raw_msgs.TaskSpecification"))
-
-  (pb-set-field ?ts "task_spec" (fact-slot-value ?spec taskspec))
-
-  (return ?ts)
-)
-
 (defrule net-send-TaskSpecification
   (time $?now)
-  ?sf <- (signal (type task-specification) (seq ?seq) (count ?count)
-     (time $?t&:(timeout ?now ?t (if (> ?count ?*BC-TASKSPECIFICATION-BURST-COUNT*)
-                 then ?*BC-TASKSPECIFICATION-PERIOD*
-                 else ?*BC-TASKSPECIFICATION-BURST-PERIOD*))))
+  ;;;; Send Task Specification at a Constant Rate.
+  ?f <- (signal (type task-specification) (time $?t&:(timeout ?now ?t ?*BC-TASKSPECIFICATION-PERIOD*)) (seq ?seq))
   (network-peer (group "PUBLIC") (id ?peer-id-public))
-  ?spec <- (task-specification)
   =>
-  (modify ?sf (time ?now) (seq (+ ?seq 1)) (count (+ ?count 1)))
+  (modify ?f (time ?now) (seq (+ ?seq 1)))
+  ;;;; Send Task Specification first at a Burst Rate, then Less Frequently
+  ;;;; Currently disabled because it cannot be reset.
+  ;?sf <- (signal (type task-specification) (seq ?seq) (count ?count)
+  ;   (time $?t&:(timeout ?now ?t (if (> ?count ?*BC-TASKSPECIFICATION-BURST-COUNT*)
+  ;               then ?*BC-TASKSPECIFICATION-PERIOD*
+  ;               else ?*BC-TASKSPECIFICATION-BURST-PERIOD*))))
+  ;(network-peer (group "PUBLIC") (id ?peer-id-public))
+  ;?spec <- (task-specification)
+  ;=>
+  ;(modify ?sf (time ?now) (seq (+ ?seq 1)) (count (+ ?count 1)))
 
-  (bind ?task-specification (net-create-TaskSpecification ?spec))
+  (bind ?task-specification (send [task-specification] create-msg))
   (pb-broadcast ?peer-id-public ?task-specification)
 
   (do-for-all-facts ((?client network-client)) TRUE
