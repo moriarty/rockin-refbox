@@ -2,7 +2,28 @@
 ---
 # Main configuration document
 
+     
+
+
 llsfrb:
+  raw:
+    tests:
+      BNT:
+        1: BNT1<foo;bar>
+      BMT:
+        1: BMT1<foo;bar>
+      BTT:
+        1: BTT1<foo;bar>
+        2: BTT2<foo;bar>
+        3: BTT3<foo;bar>
+      PPT:
+        1: PPT1<foo;bar>
+      CBT:
+        1: CBT1<foo;bar>
+        2: CBT2<foo;bar>
+      RFT:
+        1: RTF1<foo;bar>
+
   plugins: "" #"conveyor_belt"
 
   log:

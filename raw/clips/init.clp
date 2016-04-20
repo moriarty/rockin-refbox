@@ -10,6 +10,16 @@
   ?*DEBUG* = 2  ;debug levels: 0 ~ none, 1 ~ minimal, 2 ~ more, 3 ~ maximum
   ?*CONFIG_PREFIXES* = (create$ "/llsfrb")
   ?*START-TIME* = (now)
+  ?*BNT1* = ""
+  ?*BMT1* = ""
+  ?*BTT1* = ""
+  ?*BTT2* = ""
+  ?*BTT3* = ""
+  ?*PPT1* = ""
+  ?*CBT1* = ""
+  ?*CBT2* = ""
+  ?*RFT1* = ""
+
 )
 
 (deffunction resolve-file (?file)
@@ -67,6 +77,30 @@
   =>
   (printout t "Setting debug level to " ?v " (was " ?*DEBUG* ")" crlf)
   (bind ?*DEBUG* ?v)
+)
+
+(defrule load-tests
+  (init)
+  (confval (path "/llsfrb/raw/tests/BNT/1") (type STRING) (value ?bnt1))
+  (confval (path "/llsfrb/raw/tests/BMT/1") (type STRING) (value ?bmt1))
+  (confval (path "/llsfrb/raw/tests/BTT/1") (type STRING) (value ?btt1))
+  (confval (path "/llsfrb/raw/tests/BTT/2") (type STRING) (value ?btt2))
+  (confval (path "/llsfrb/raw/tests/BTT/3") (type STRING) (value ?btt3))
+  (confval (path "/llsfrb/raw/tests/PPT/1") (type STRING) (value ?ppt1))
+  (confval (path "/llsfrb/raw/tests/CBT/1") (type STRING) (value ?cbt1))
+  (confval (path "/llsfrb/raw/tests/CBT/2") (type STRING) (value ?cbt2))
+  (confval (path "/llsfrb/raw/tests/RFT/1") (type STRING) (value ?rft1))
+  =>
+  (printout t "LOADING TASK SPECIFICATIONS FROM CONFIG FILE" crlf)
+  (bind ?*BNT1* ?bnt1)
+  (bind ?*BMT1* ?bmt1)
+  (bind ?*BTT1* ?btt1)
+  (bind ?*BTT2* ?btt2)
+  (bind ?*BTT3* ?btt3)
+  (bind ?*PPT1* ?ppt1)
+  (bind ?*CBT1* ?cbt1)
+  (bind ?*CBT2* ?cbt2)
+  (bind ?*RFT1* ?rft1)
 )
 
 (defrule silence-debug-facts

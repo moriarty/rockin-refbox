@@ -31,10 +31,10 @@
 
 
   (modify-instance [task-specification]
-    (task-spec "BMT<S2,S2,S3,line(M20_100,F20_20_G,F20_20_B,S40_40_B,S40_40_G,R20,M30),EXIT>")
+    (task-spec ?*BMT1*)
+    ;(task-spec "BMT<S2,S2,S3,line(M20_100,F20_20_G,F20_20_B,S40_40_B,S40_40_G,R20,M30),EXIT>")
   )
-  (assert (attention-message (text "BMT Task Spec Set")))
-
+  ;(assert (attention-message (text "BMT Task Spec Set")))
 )
 
 (defmessage-handler BasicManipulationTest1 handle-feedback (?pb-msg ?time ?name ?team)

@@ -30,9 +30,11 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (modify-instance [task-specification] (task-spec "CBT<C1>"))
-
-  (assert (attention-message (text "CBT Task Set")))
+  (modify-instance [task-specification]
+    (task-spec ?*CBT1*)
+    ;(task-spec "CBT<C1>")
+  )
+  ;(assert (attention-message (text "CBT Task Set")))
 )
 
 (defmessage-handler ConveyorBeltTest1 handle-feedback (?pb-msg ?time ?name ?team)
@@ -62,9 +64,11 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (modify-instance [task-specification] (task-spec "CBT<C2>"))
-
-  (assert (attention-message (text "CBT Task Set")))
+  (modify-instance [task-specification]
+    (task-spec ?*CBT2*)
+    ;(task-spec "CBT<C2>")
+  )
+  ;(assert (attention-message (text "CBT Task Set")))
 )
 
 (defmessage-handler ConveyorBeltTest2 handle-feedback (?pb-msg ?time ?name ?team)

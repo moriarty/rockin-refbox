@@ -30,21 +30,20 @@
   )
 
   (modify-instance [task-specification]
-    (task-spec (str-cat
-    "RFT<initialsituation("
-      "<S5,(R20,M30,S40_40_B)>"
-;      "<S2,(S40_40_G,M20,R20)>"
-;      "<S3,(F20_20_B,M20_100,F20_20_G)>"
-    ");"
-    "goalsituation("
-      "<C1,line(M20_100,M30,M20)>"
-;      "<S4,line(F20_20_G,R20,R20)>"
-;      "<S1,line(S40_40_B,S40_40_G,F20_20_B)>"
-     ")>"
-  )))
-
-  (assert (attention-message (text "RFT Task Set")))
-
+    (task-spec ?*RFT1*)
+    ;(task-spec (str-cat
+    ;"RFT<initialsituation("
+    ;  "<S5,(R20,M30,S40_40_B)>"
+    ;  "<S2,(S40_40_G,M20,R20)>"
+    ;  "<S3,(F20_20_B,M20_100,F20_20_G)>"
+    ;");"
+    ;"goalsituation("
+    ;  "<C1,line(M20_100,M30,M20)>"
+    ;  "<S4,line(F20_20_G,R20,R20)>"
+    ;  "<S1,line(S40_40_B,S40_40_G,F20_20_B)>"
+    ; ")>"))
+  )
+  ;(assert (attention-message (text "RFT Task Set")))
 )
 
 (defmessage-handler RobocupFinalTest1 handle-feedback (?pb-msg ?time ?name ?team)
@@ -57,8 +56,6 @@
   ?bm <- (object (is-a Test))
   =>
   (make-instance [RFT1] of RobocupFinalTest1 (type RFT) (type-id 1) (description "Robocup Final Test"))
-  (make-instance [RFT2] of RobocupFinalTest1 (type RFT) (type-id 1) (description "Robocup Final Test"))
 
   (slot-insert$ ?bm registered-scenarios 1 [RFT1])
-  (slot-insert$ ?bm registered-scenarios 1 [RFT2])
 )

@@ -30,11 +30,10 @@
   )
 
   (modify-instance [task-specification]
-    (task-spec "PPT<S3,(S40_40_B,M20,F20_20_B),S4>"
-  ))
-
-  (assert (attention-message (text "PPT Task Spec Set")))
-
+    (task-spec ?*PPT1*)
+    ;(task-spec "PPT<S3,(S40_40_B,M20,F20_20_B),S4>")
+  )
+  ;(assert (attention-message (text "PPT Task Spec Set")))
 )
 
 (defmessage-handler PrecisionPlacementTest1 handle-feedback (?pb-msg ?time ?name ?team)
