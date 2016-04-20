@@ -29,9 +29,18 @@
     (states [stopped-state] [running-state] [paused-state] [finished-state])
   )
 
-  (assert (task-specification (taskspec 
-"RFT<initialsituation(<S5,(R20,M30,S40_40_B)><S2,(S40_40_G,M20,R20)><S3,(F20_20_B,M20_100,F20_20_G)>);goalsituation(<C1,line(M20_100,M30,M20)><S4,line(F20_20_G,R20,R20)><S1,line(S40_40_B,S40_40_G,F20_20_B)>)>"
-  )))
+  (assert (task-specification (taskspec (str-cat  
+    "RFT<initialsituation("
+      "<S5,(R20,M30,S40_40_B)>"
+;      "<S2,(S40_40_G,M20,R20)>"
+;      "<S3,(F20_20_B,M20_100,F20_20_G)>"
+    ");"
+    "goalsituation("
+      "<C1,line(M20_100,M30,M20)>"
+;      "<S4,line(F20_20_G,R20,R20)>"
+;      "<S1,line(S40_40_B,S40_40_G,F20_20_B)>"
+     ")>"
+  ))))
 
   (assert (attention-message (text "RFT Task Set")))
 

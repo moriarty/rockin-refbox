@@ -619,6 +619,11 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="label" translatable="yes">&lt;None&gt;</property>
+                                    <property name="wrap">True</property>
+                                    <property name="wrap_mode">char</property>
+                                    <property name="ellipsize">end</property>
+                                    <property name="max_width_chars">60</property>
+                                    <property name="lines">3</property>
                                     <attributes>
                                       <attribute name="font-desc" value="Cantarell Bold 14"/>
                                       <attribute name="foreground" value="#000000000000"/>
