@@ -8,14 +8,20 @@ message ObjectIdentifier {
 
   enum ObjectType {
     AX = 1;
-    EM = 2;
-    ER = 3;
+    // EM = 2; BIN
+    // ER = 3; TILE
+    // TODO
+    F20_20_B;
+    F20_20_G;
+    CO_R;
+    CO_B;
   }
 
   // The object class (e.g. "EM-01") consists of the type ("EM") and a type
   // ID (1).
   required ObjectType type        = 1;  // The type of the object
-  required int64      type_id     = 2;  // The type ID of the object
+  // TODO
+  optional int64      type_id     = 2;  // The type ID of the object
 
   // All labeled objects also have an instance ID. For example, there could
   // exist two instances of EM-01 containers, called "EM-01-001" and
@@ -34,7 +40,8 @@ message LocationIdentifier {
     SH    = 1;  // Shelf
     WS    = 2;  // Workstation
     CB    = 3;  // Conveyor belt
-    ROBOT = 4;
+    WP    = 4;  // Navigation WP
+    ROBOT = 5;
   }
 
   required LocationType type        = 1;  // The type of location

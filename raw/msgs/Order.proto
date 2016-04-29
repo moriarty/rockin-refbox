@@ -50,6 +50,14 @@ message Order {
     FINISHED    = 6;  // The order has been processed successfully
   }
 
+  // OR Radians Later
+  enum Orientation {
+     NORTH = 1;
+     SOUTH = 2;
+     EAST  = 3;
+     WEST  = 4;
+  }
+
   // A unique identifier of this order
   required uint64 id = 1;
 
@@ -57,13 +65,19 @@ message Order {
   required Status status = 2;
 
   // The requested product represented by their identifier
-  required ObjectIdentifier object = 3;
+  optional ObjectIdentifier object = 3;
+  // use destination  
+  //optional LocationIdentifier location = 40;
+  optional Time waiting_time = 41;
+  optional Orientation orientation = 42;
 
   // There are two different interpretations of this field:
   // * When the destination field is set, the object(s) must be delivered to
   //   this destination INSIDE of the container.
   // * When the destination field is not set, the container represents the
   //   location into which the object(s) must be delivered.
+
+  // TODO PPT tiles are special containers
   optional ObjectIdentifier container = 4;
 
   // The already delivered quantity of the object
